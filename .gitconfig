@@ -1,0 +1,49 @@
+[user]
+	name = Quentin Richert
+	email = <>
+[core]
+	editor = nvim
+[checkout]
+	defaultRemote = origin
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+[init]
+	defaultBranch = main
+[diff]
+	colorMoved = default
+[pull]
+	rebase = true
+[alias]
+	a = add .
+	br = branch
+	ci = commit
+	eci = commit --allow-empty
+	c = commit -a --allow-empty-message --no-edit
+	co = checkout
+	conf = config --global --edit
+	df = diff
+	hdf = diff HEAD
+	sdf = diff --stat HEAD
+	cdf = diff --cached
+	wdf = diff --color-words
+	chdf = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
+	fixup = commit -a --fixup
+	fx = commit -a --fixup HEAD
+	la = log --patch
+	lg = log --color --graph --pretty=format:'%C(bold dim white)%h%Creset -%C(bold green)%d%Creset %s %C(bold green)(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit
+	ll = log --oneline --graph
+	llfp = log --oneline --graph --first-parent
+	lm = log --oneline --decorate=auto --author='Quentin Richert'
+	p = push
+	pf = push --force
+	rb = rebase
+	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
+	rs = restore
+	rt = reset
+	st = status
+	sw = switch
+	pick = cherry-pick
+	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+	changelog = tag -n9999999 --sort=-v:refname
