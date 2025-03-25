@@ -1,0 +1,3 @@
+# https://ghostty.org/docs/help/terminfo#ssh
+Host *
+    SetEnv TERM=xterm-256color

@@ -1,0 +1,13 @@
+# Use `cmd/ctrl+shift+,` to reload the configuration.
+
+background = #060607
+background-opacity = 0.9
+background-blur = 7
+
+font-size = 16
+font-feature = -calt
+window-width = 80
+window-height = 24
+
+window-theme = dark
+macos-titlebar-style = tabs
