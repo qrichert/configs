@@ -177,7 +177,7 @@ require("lazy").setup({
             map("n", "<Leader>gS", gitsigns.stage_buffer)
             map("n", "<Leader>gr", gitsigns.reset_hunk)
             map("n", "<Leader>gR", gitsigns.reset_buffer)
-            map("n", "<Leader>gN", gitsigns.previous_hunk)
+            map("n", "<Leader>gN", gitsigns.prev_hunk)
             map("n", "<Leader>gn", gitsigns.next_hunk)
 
             -- Blame.
