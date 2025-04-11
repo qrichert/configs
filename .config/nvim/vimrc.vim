@@ -60,6 +60,10 @@ autocmd BufEnter *.yaml,*.yml setlocal tabstop=2 shiftwidth=2
 nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>w <Cmd>w<CR>
 
+" Convenience remappings.
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
 " Force the use of `hjkl`.
 noremap <Left> <Nop>
 noremap <Right> <Nop>
