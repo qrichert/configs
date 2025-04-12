@@ -244,6 +244,11 @@ require("lazy").setup({
       config = function()
         -- require("jb").setup({ transparent = true })
         vim.cmd("colorscheme jb")
+
+        -- Make inlays less intrusive.
+        vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "Gray" })
+        -- For some reason, exception statements were mapped to error colors.
+        vim.api.nvim_set_hl(0, "pythonException", { link = "Statement" })
       end,
     },
 
@@ -291,6 +296,235 @@ require("lazy").setup({
 
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
+
+    --- LSP ---
+
+    -- TODO: https://github.com/neovim/nvim-lspconfig/issues/3494
+    {
+      "neovim/nvim-lspconfig",
+      config = function()
+        -- Setup language servers.
+        local lspconfig = require("lspconfig")
+
+        -- Rust.
+        --
+        -- ```
+        -- rustup component add rust-analyzer
+        -- ```
+        --
+        --  Commands:
+        --   - `:CargoReload`
+        lspconfig.rust_analyzer.setup({
+          -- settings = {
+          --   ["rust-analyzer"] = {
+          --     cargo = {}
+          --   }
+          -- }
+        })
+
+        -- Python.
+        --
+        -- ```
+        -- uv tool install ruff@latest
+        -- pipx install jedi-language-server
+        -- ```
+        lspconfig.ruff.setup({
+          -- init_options = {
+          --   settings = {
+          --     -- Server settings should go here.
+          --   }
+          -- }
+        })
+        lspconfig.jedi_language_server.setup({})
+
+        vim.api.nvim_create_autocmd("LspAttach", {
+          group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+          callback = function(ev)
+            -- Buffer local mappings.
+            local opts = { buffer = ev.buf }
+
+            vim.keymap.set("n", "<Leader>d", function()
+              vim.diagnostic.open_float()
+            end, opts)
+
+            -- TODO: Use the defaults and add the to `Vim.md`.
+            -- https://neovim.io/doc/user/news-0.11.html#_defaults
+            -- grn in Normal mode maps to vim.lsp.buf.rename()
+            -- grr in Normal mode maps to vim.lsp.buf.references()
+            -- gri in Normal mode maps to vim.lsp.buf.implementation()
+            -- gO in Normal mode maps to vim.lsp.buf.document_symbol()
+            -- gra in Normal and Visual mode maps to vim.lsp.buf.code_action()
+            -- CTRL-S in Insert and Select mode maps to vim.lsp.buf.signature_help()
+            -- Mouse popup-menu includes an "Open in web browser" item when you right-click on a URL.
+            -- Mouse popup-menu includes a "Go to definition" item when LSP is active in the buffer.
+            -- Mouse popup-menu includes "Show Diagnostics", "Show All Diagnostics" and "Configure Diagnostics" items when there are diagnostics in the buffer.
+            vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "<Leader>r", vim.lsp.buf.rename, opts)
+            vim.keymap.set({ "n", "v" }, "<Leader>a", vim.lsp.buf.code_action, opts)
+            vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+            vim.keymap.set("n", "<Leader>f", function()
+              vim.lsp.buf.format({ async = true })
+            end, opts)
+
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+            -- Inlay type and parameter hints.
+            vim.lsp.inlay_hint.enable(false) -- Disabled by default, they're noisy.
+            vim.keymap.set("n", "<Leader>h", function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            end)
+          end,
+        })
+      end,
+    },
+
+    -- Auto-completion, inlay hints and method signatures.
+    {
+      "saghen/blink.cmp",
+
+      -- use a release tag to download pre-built binaries
+      version = "1.*",
+
+      ---@module "blink.cmp"
+      ---@type blink.cmp.Config
+      opts = {
+        -- "default" (recommended) for mappings similar to built-in completions (C-y to accept)
+        -- "super-tab" for mappings similar to vscode (tab to accept)
+        -- "enter" for enter to accept
+        -- "none" for no mappings
+        --
+        -- All presets have the following mappings (vim.keymap.set):
+        -- C-space: Open menu or open docs if already open
+        -- C-n/C-p or Up/Down: Select next/previous item
+        -- C-f/C-b: Scroll documentation down/up.
+        -- C-e: Hide menu
+        -- C-k: Toggle signature help (if signature.enabled = true)
+        --
+        -- See :h blink-cmp-config-keymap for defining your own keymap
+        keymap = {
+          preset = "default",
+          -- With `Enter` to accept completions you can't add a
+          -- line-break without accepting a completion.
+          -- ["<CR>"] = { "accept", "fallback" },
+          ["<Tab>"] = { "accept", "fallback" },
+          ["<C-w>"] = { "show", "show_documentation", "hide_documentation", "fallback" }, -- Remap `<C-Space>`, taken by macOS.
+        },
+
+        appearance = {
+          -- "mono" (default) for "Nerd Font Mono" or "normal" for "Nerd Font"
+          -- Adjusts spacing to ensure icons are aligned
+          nerd_font_variant = "mono",
+        },
+
+        completion = {
+          -- (Default) Only show the documentation popup when manually triggered
+          documentation = { auto_show = false },
+          -- Greyed-out preview of the completion.
+          ghost_text = { enabled = true },
+        },
+
+        -- Default list of enabled providers defined so that you can extend it
+        -- elsewhere in your config, without redefining it, due to `opts_extend`
+        sources = {
+          default = { "lsp", "path", "snippets", "buffer" },
+        },
+
+        -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+        -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+        -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+        --
+        -- See the fuzzy documentation for more information
+        fuzzy = { implementation = "prefer_rust_with_warning" },
+      },
+      opts_extend = { "sources.default" },
+    },
+
+    -- TODO: Keep nvim-cmp config around for now, even tho we replaced it
+    -- by blink.cmp. But i want the blink-cmp thing to be another commit
+    -- to keep this in history. Rebases would be too painful if I did it
+    -- now.
+    -- {
+    --   "hrsh7th/nvim-cmp",
+    --   -- load cmp on InsertEnter
+    --   event = "InsertEnter",
+    --   -- these dependencies will only be loaded when cmp loads
+    --   -- dependencies are always lazy-loaded unless specified otherwise
+    --   dependencies = {
+    --     "neovim/nvim-lspconfig",
+    --     "hrsh7th/cmp-nvim-lsp",
+    --     "hrsh7th/cmp-buffer",
+    --     "hrsh7th/cmp-path",
+    --   },
+    --   config = function()
+    --     local cmp = require("cmp")
+    --
+    --     cmp.setup({
+    --       mapping = cmp.mapping.preset.insert({
+    --         ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    --         ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    --         ["<C-w>"] = cmp.mapping.complete(), -- `<C-Space>` is taken by macOS.
+    --         ["<C-e>"] = cmp.mapping.abort(),
+    --         -- Accept currently selected item.
+    --         ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    --       }),
+    --
+    --       sources = cmp.config.sources({
+    --         { name = "nvim_lsp" },
+    --       }, {
+    --         { name = "path" },
+    --       }),
+    --
+    --       experimental = {
+    --         -- Greyed-out preview of the completion.
+    --         ghost_text = true,
+    --       },
+    --     })
+    --
+    --     -- -- Enable completing paths in `:`.
+    --     -- cmp.setup.cmdline(":", {
+    --     --   sources = cmp.config.sources({
+    --     --     { name = "path" }
+    --     --   })
+    --     -- })
+    --
+    --   end
+    -- },
+
+    -- TODO: blink.cmp does this too, same fate as nvim-cmp
+
+    -- -- Inline function signatures.
+    -- {
+    --   "ray-x/lsp_signature.nvim",
+    --   event = "VeryLazy",
+    --   opts = {},
+    --   config = function(_, opts)
+    --     -- Get signatures (and _only_ signatures) when in argument lists.
+    --     require "lsp_signature".setup({
+    --       doc_lines = 0,
+    --       handler_opts = {
+    --         border = "none"
+    --       },
+    --     })
+    --   end
+    -- },
+
+    -- Rust.
+    --
+    -- Features:
+    --  - Auto-integration with the Cargo syntax checker.
+    --
+    -- Commands:
+    --  - `:RustTest` Run test under cursor.
+    {
+      "rust-lang/rust.vim",
+      ft = { "rust" },
+      config = function()
+        -- Explicitly disable format-on-save.
+        vim.g.rustfmt_autosave = 0
+      end,
+    },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
