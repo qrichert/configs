@@ -108,6 +108,17 @@ require("lazy").setup({
   spec = {
     -- add your plugins here
 
+    -- Markdown preview.
+    --
+    --  Commands:
+    --   - `:LivePreview start`
+    {
+      "brianhuster/live-preview.nvim",
+      dependencies = {
+        "ibhagwan/fzf-lua",
+      },
+    },
+
     -- Reopen files at last edit position.
     { "farmergreg/vim-lastplace", lazy = false },
 
