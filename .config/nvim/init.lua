@@ -158,19 +158,16 @@ require("lazy").setup({
       config = function()
         vim.keymap.set("", "<Leader>p", "<Cmd>Files<CR>")
         vim.keymap.set("", "<Leader>s", "<Cmd>Rg<CR>")
-        -- When using :Files, pass the file list through
+        -- When using `:Files`, pass the file list through
         --   https://github.com/jonhoo/proximity-sort
         -- to prefer files closer to the current file.
         function list_cmd()
-          local base = vim.fn.fnamemodify(vim.fn.expand("%"), ":h:.:S")
-          if base == "." then
-            -- If there is no current file, proximity-sort can't do its thing.
-            return "fd --hidden --type file --follow"
+          local current_file = vim.fn.expand("%")
+          local fd_cmd = "fd --hidden --type file --follow --exclude .git/"
+          if current_file == "" then
+            return fd_cmd
           else
-            return vim.fn.printf(
-              "fd --hidden --type file --follow | proximity-sort %s",
-              vim.fn.shellescape(vim.fn.expand("%"))
-            )
+            return vim.fn.printf("%s | proximity-sort %s", fd_cmd, vim.fn.shellescape(current_file))
           end
         end
         vim.api.nvim_create_user_command("Files", function(arg)
