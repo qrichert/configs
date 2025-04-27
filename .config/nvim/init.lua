@@ -110,8 +110,8 @@ require("lazy").setup({
 
     -- Markdown preview.
     --
-    --  Commands:
-    --   - `:LivePreview start`
+    -- Commands:
+    --  - `:LivePreview start`
     {
       "brianhuster/live-preview.nvim",
       dependencies = {
@@ -127,6 +127,10 @@ require("lazy").setup({
       "folke/todo-comments.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
       opts = {},
+      config = function(_, opts)
+        vim.keymap.set("n", "<Leader>t", "<Cmd>TodoFzfLua<CR>")
+        require("todo-comments").setup(opts)
+      end,
     },
 
     -- Quick navigation.
@@ -142,6 +146,60 @@ require("lazy").setup({
       end,
     },
 
+    -- `fzf` integration (`:FzfLua`).
+    --
+    -- Dependencies:
+    --  - fd-find
+    --  - proximity-sort
+    --  - ripgrep
+    {
+      "ibhagwan/fzf-lua",
+      event = "VeryLazy",
+      -- optional for icon support
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      opts = {
+        keymap = {
+          -- Targets `fzf-lua`'s UI (preview windows, etc.).
+          builtin = {
+            ["<C-f>"] = "preview-page-down",
+            ["<C-b>"] = "preview-page-up",
+          },
+          -- Targets `fzf`'s binary (the list of files).
+          fzf = {
+            ["ctrl-y"] = "select-all+accept",
+            ["ctrl-u"] = "half-page-up",
+            ["ctrl-d"] = "half-page-down",
+            ["ctrl-x"] = "jump",
+            -- ["ctrl-f"] = "preview-page-down",
+            -- ["ctrl-b"] = "preview-page-up",
+          },
+        },
+      },
+      config = function(_, opts)
+        local fzf = require("fzf-lua")
+        fzf.setup(opts)
+
+        vim.keymap.set("n", "<Leader>s", function()
+          fzf.grep_project()
+        end, { desc = "fzf-lua: grep project (rg)" })
+
+        vim.keymap.set("n", "<Leader>p", function()
+          local current_file = vim.fn.expand("%:p")
+          local fd_cmd = "fd --hidden --type file --follow --exclude .git/"
+          if current_file == "" then
+            fzf.files({ cmd = fd_cmd })
+          else
+            -- Pass the file list through
+            --   https://github.com/jonhoo/proximity-sort
+            -- to prefer files closer to the current file.
+            fzf.files({
+              cmd = ("%s | proximity-sort %s"):format(fd_cmd, vim.fn.shellescape(current_file)),
+            })
+          end
+        end, { desc = "fzf-lua: find file (fd + proximity-sort)" })
+      end,
+    },
+
     -- -- Nice status bar.
     -- {
     --   "itchyny/lightline.vim",
@@ -150,35 +208,6 @@ require("lazy").setup({
     --     vim.o.showmode = false -- Redundant.
     --   end
     -- },
-
-    -- `fzf` integration (`:Files`, `:Rg`).
-    { "junegunn/fzf" },
-    {
-      "junegunn/fzf.vim",
-      config = function()
-        vim.keymap.set("", "<Leader>p", "<Cmd>Files<CR>")
-        vim.keymap.set("", "<Leader>s", "<Cmd>Rg<CR>")
-        -- When using `:Files`, pass the file list through
-        --   https://github.com/jonhoo/proximity-sort
-        -- to prefer files closer to the current file.
-        function list_cmd()
-          local current_file = vim.fn.expand("%")
-          local fd_cmd = "fd --hidden --type file --follow --exclude .git/"
-          if current_file == "" then
-            return fd_cmd
-          else
-            return vim.fn.printf("%s | proximity-sort %s", fd_cmd, vim.fn.shellescape(current_file))
-          end
-        end
-        vim.api.nvim_create_user_command("Files", function(arg)
-          vim.fn["fzf#vim#files"](
-            arg.qargs,
-            { source = list_cmd(), options = "--scheme=path --tiebreak=index" },
-            arg.bang
-          )
-        end, { bang = true, nargs = "?", complete = "dir" })
-      end,
-    },
 
     -- Git integration (`:Gitsigns`).
     {
