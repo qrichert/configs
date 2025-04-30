@@ -3,18 +3,24 @@
 	email = <>
 [core]
 	editor = nvim
+[init]
+	defaultBranch = main
 [checkout]
 	defaultRemote = origin
 [color]
 	branch = auto
 	diff = auto
 	status = auto
-[init]
-	defaultBranch = main
 [diff]
 	colorMoved = default
 [pull]
 	rebase = true
+[merge]
+	tool = nvimdiff
+[mergetool]
+	prompt = false
+[mergetool "nvimdiff"]
+	layout = LOCAL,MERGED,REMOTE
 [alias]
 	a = add .
 	br = branch
