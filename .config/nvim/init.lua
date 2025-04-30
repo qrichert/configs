@@ -200,14 +200,14 @@ require("lazy").setup({
       end,
     },
 
-    -- -- Nice status bar.
-    -- {
-    --   "itchyny/lightline.vim",
-    --   lazy = false,
-    --   config = function()
-    --     vim.o.showmode = false -- Redundant.
-    --   end
-    -- },
+    -- Nice status bar.
+    {
+      "itchyny/lightline.vim",
+      lazy = false,
+      config = function()
+        vim.o.showmode = false -- Redundant.
+      end,
+    },
 
     -- Git integration (`:Gitsigns`).
     {
