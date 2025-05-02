@@ -300,18 +300,7 @@ require("lazy").setup({
       end,
     },
 
-    -- TODO: Try: oil.nvim (edit your filesystem like a buffer)
-    -- https://www.youtube.com/watch?v=-r1mMg-yVZE
-
-    -- File tree.
-    {
-      "nvim-tree/nvim-tree.lua",
-      config = function()
-        vim.keymap.set("", "<Leader><Tab>", "<Cmd>NvimTreeToggle<CR>")
-        require("nvim-tree").setup()
-      end,
-    },
-
+    -- Restore last session's open files for the current directory.
     {
       "rmagatti/auto-session",
       lazy = false,
@@ -325,6 +314,9 @@ require("lazy").setup({
       },
     },
 
+    -- Articifial padding on the left to center text.
+    --
+    -- Also works as a scratchpad.
     {
       "shortcuts/no-neck-pain.nvim",
       version = "*",
@@ -347,6 +339,52 @@ require("lazy").setup({
             },
           },
         })
+      end,
+    },
+
+    -- Edit your filesystem like a buffer.
+    --
+    -- Commands:
+    --  - `:Oil`
+    --  - `g?` Help.
+    {
+      "stevearc/oil.nvim",
+      ---@module 'oil'
+      ---@type oil.SetupOpts
+      opts = {
+        -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
+        skip_confirm_for_simple_edits = true,
+        view_options = {
+          -- Show files and directories that start with "."
+          show_hidden = true,
+        },
+      },
+      -- Optional dependencies
+      -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
+      dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+      -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+      lazy = false,
+      config = function(_, opts)
+        local oil = require("oil")
+        oil.setup(opts)
+
+        vim.keymap.set("n", "-", "<Cmd>Oil<CR>", { desc = "Open parent directory" })
+        vim.keymap.set("n", "<Leader><Tab>", function()
+          -- Look for an existing Oil buffer in a vertical split.
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
+            if ft == "oil" then
+              vim.api.nvim_win_close(win, true)
+              return
+            end
+          end
+
+          -- Otherwise, open a vertical Oil split on the left.
+          -- Adjust width as needed.
+          vim.cmd("topleft vsplit | vertical resize 30")
+          oil.open()
+        end, { desc = "Toggle Oil file explorer" })
       end,
     },
 
