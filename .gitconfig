@@ -21,6 +21,10 @@
 	prompt = false
 [mergetool "nvimdiff"]
 	layout = LOCAL,MERGED,REMOTE
+[url "git@github.com:"]
+	insteadOf = gh:
+[url "ssh://misc/~/"]
+	insteadOf = misc:
 [alias]
 	a = add .
 	br = branch
