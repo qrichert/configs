@@ -31,6 +31,8 @@ alias pr=":"
 alias prettier="prettier --write --prose-wrap=always --print-width=72"
 
 export EDITOR=nvim
+export LESSCHARSET="UTF-8"
+export LESS="-R -F -X"
 export PRE_COMMIT_ALLOW_NO_CONFIG=1
 
 function history
