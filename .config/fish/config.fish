@@ -15,6 +15,10 @@ if status is-interactive
     bind -M insert \cf forward-char # Re-enable <C-f> in Vim mode.
 end
 
+if command -v eza > /dev/null
+    alias ls="eza"
+end
+
 alias vim="nvim"
 alias git="LANG=en_US.UTF-8 $(which git)"
 alias gti="git"
