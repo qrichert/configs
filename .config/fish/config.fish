@@ -34,6 +34,7 @@ export EDITOR=nvim
 export LESSCHARSET="UTF-8"
 export LESS="-R -F -X"
 export PRE_COMMIT_ALLOW_NO_CONFIG=1
+export CRONRUNNER_ENV="$HOME/.cron.env"
 
 function history
     builtin history --show-time='%h/%d - %H:%M:%S ' | tail -r
