@@ -20,3 +20,51 @@ if ! grep -qF "SetEnv TERM=xterm-256color" ~/.ssh/config; then
     echo "" >> ~/.ssh/config
     cat ./.config/ghostty/ssh.txt >> ~/.ssh/config
 fi
+
+# Install essential software if `$DEEZ_INSTALL_ESSENTIALS` is set.
+if [[ -n $DEEZ_INSTALL_ESSENTIALS ]]; then
+    echo  "Installing essential software..."
+
+    # Install for macOS.
+    if [[ $DEEZ_OS == "macos" ]]; then
+        echo "mac"
+
+    # Install for Linux.
+    elif [[ $DEEZ_OS == "linux" ]]; then
+        sudo snap install \
+            httpie \
+            nvim \
+            ;
+        if [[ -n $DEEZ_INSTALL_DESKTOP ]]; then
+            sudo snap install \
+                ghostty \
+                ;
+        fi
+        sudo apt install -y \
+            bat \
+            exa \
+            fd-find \
+            htop \
+            ncdu \
+            ripgrep \
+            ;
+        sudo ln -sf $(which fdfind) $(dirname $(which fdfind))/fd
+    fi
+
+    # The following programs are not available in package managers, and
+    # thus need to be built.
+    if ! command -v cargo > /dev/null 2>&1; then
+        read -p "Some tools require Rust to build. Install Rust? " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        fi
+    fi
+    if command -v cargo > /dev/null 2>&1; then
+        cargo install --locked \
+            cronrunner \
+            ports \
+            tealdeer \
+            ;
+    fi
+fi
