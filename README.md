@@ -1,11 +1,13 @@
 # configs
 
-```console
-$ cd configs && deez sync
+```shell
+cd configs && deez sync
+```
 
-# or
+or
 
-$ deez sync https://github.com/qrichert/configs.git
+```shell
+deez sync https://github.com/qrichert/configs.git
 ```
 
 See [`deezconfigs`'s repo](https://github.com/qrichert/deezconfigs).
