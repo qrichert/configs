@@ -43,7 +43,7 @@ if [[ -n $DEEZ_INSTALL_ESSENTIALS ]]; then
         brew install $MACOS_BREW
 
         if [[ -n $DEEZ_INSTALL_DESKTOP ]]; then
-            brew install $MACOS_BREW_DESKTOP
+            brew install --cask $MACOS_BREW_DESKTOP
         fi
 
         if command -v cargo > /dev/null 2>&1; then
@@ -55,7 +55,7 @@ if [[ -n $DEEZ_INSTALL_ESSENTIALS ]]; then
         sudo snap install $LINUX_SNAP
 
         if [[ -n $DEEZ_INSTALL_DESKTOP ]]; then
-            sudo snap install $LINUX_SNAP_DESKTOP
+            sudo snap install --classic $LINUX_SNAP_DESKTOP
         fi
 
         sudo apt install -y $LINUX_APT
