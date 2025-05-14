@@ -6,5 +6,5 @@ MACOS_CARGO="cronrunner ports tealdeer"
 # Linux
 LINUX_SNAP="httpie nvim"
 LINUX_SNAP_DESKTOP="ghostty"
-LINUX_APT="bat fd-find htop jq ncdu ripgrep"
+LINUX_APT="bat qalculate-gtk fd-find htop jq ncdu ripgrep"
 LINUX_CARGO="cronrunner eza ports tealdeer"
