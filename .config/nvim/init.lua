@@ -108,6 +108,14 @@ require("lazy").setup({
   spec = {
     -- add your plugins here
 
+    -- Better `%`.
+    --
+    -- Detects blocks more accurately, and:
+    -- - `%` Cycle through blocks.
+    -- - `g%`/`z%` Go up/down a level.
+    -- - `[%`/`]%` Go to previous/next block open/close.
+    { "andymass/vim-matchup", event = { "BufReadPre" } },
+
     -- Markdown preview.
     --
     -- Commands:
@@ -479,6 +487,13 @@ require("lazy").setup({
             -- Using this option may slow down your editor, and you may see some duplicate highlights.
             -- Instead of true it can also be a list of languages
             additional_vim_regex_highlighting = false,
+          },
+
+          matchup = {
+            -- Required for vim-matchup to work with Treesitter.
+            enable = true,
+            -- Do not use virtual text to highlight the end of a block.
+            disable_virtual_text = true,
           },
         })
       end,
