@@ -30,6 +30,9 @@ alias pra="pre-commit run --all-files"
 alias pr=":"
 alias prettier="prettier --write --prose-wrap=always --print-width=72"
 
+alias gs="git status"
+alias gl="git ll"
+
 export EDITOR=nvim
 export LESSCHARSET="UTF-8"
 export LESS="-R -F -X"
