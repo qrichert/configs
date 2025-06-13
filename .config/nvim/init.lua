@@ -192,7 +192,9 @@ require("lazy").setup({
         end, { desc = "fzf-lua: grep project (rg)" })
 
         vim.keymap.set("n", "<Leader>p", function()
-          local current_file = vim.fn.expand("%:p")
+          -- `proximity-sort` needs relative paths because we output
+          -- relative paths with `fd`.
+          local current_file = vim.fn.expand("%:.")
           local fd_cmd = "fd --hidden --type file --follow --exclude .git/"
           if current_file == "" then
             fzf.files({ cmd = fd_cmd })
@@ -202,6 +204,13 @@ require("lazy").setup({
             -- to prefer files closer to the current file.
             fzf.files({
               cmd = ("%s | proximity-sort %s"):format(fd_cmd, vim.fn.shellescape(current_file)),
+              -- Let `fzf` apply fuzzy scoring, but prefer the original
+              -- `proximity-sort` order when scores are equal. Without
+              -- this, `fzf` may reorder matches based purely on fuzzy
+              -- score, ignoring proximity entirely.
+              fzf_opts = {
+                ["--tiebreak"] = "index",
+              },
             })
           end
         end, { desc = "fzf-lua: find file (fd + proximity-sort)" })
