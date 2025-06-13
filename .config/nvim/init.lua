@@ -484,9 +484,12 @@ require("lazy").setup({
 
             -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
             disable = function(lang, buf)
-              local max_filesize = 100 * 1024 -- 100 KB
+              local max_filesize = 512 * 1024 -- 512 KB
               local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
               if ok and stats and stats.size > max_filesize then
+                vim.schedule(function()
+                  vim.notify("Treesitter disabled for large file: " .. stats.size .. " bytes", vim.log.levels.WARN)
+                end)
                 return true
               end
             end,
