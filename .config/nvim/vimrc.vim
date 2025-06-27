@@ -61,6 +61,10 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>w <Cmd>w<CR>
 nnoremap <Leader>q <Cmd>bp<bar>sp<bar>bn<bar>bd<CR>
 
+" Quickfix mappings.
+nnoremap <M-j> <Cmd>cnext<CR>
+nnoremap <M-k> <Cmd>cprevious<CR>
+
 " Convenience remappings.
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
