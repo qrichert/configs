@@ -43,7 +43,7 @@ set shiftwidth=4            " Shift (`<<`, `>>`, `=`) by 4 spaces (breaks `.edit
 set softtabstop=-1          " Pressing `<Tab>` matches indentation width (`shiftwidth`).
 
 autocmd FileType json setlocal colorcolumn=81
-autocmd FileType markdown setlocal textwidth=72 colorcolumn=73
+autocmd FileType markdown,text setlocal textwidth=72 colorcolumn=73 nosmartindent
 autocmd FileType python setlocal colorcolumn=73,89
 autocmd FileType rust setlocal colorcolumn=73,101
 autocmd FileType vim setlocal colorcolumn=73
