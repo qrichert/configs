@@ -408,6 +408,17 @@ require("lazy").setup({
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
 
+    --- Mason ---
+
+    -- Mason is a package manager, like `brew` for Neovim. It doesn't
+    -- install packages on its own by default.
+    {
+      "mason-org/mason.nvim",
+      opts = {},
+    },
+
+    -- For the LSPs, refer to the 'LSP' section.
+
     --- Treesitter ---
 
     {
@@ -513,6 +524,20 @@ require("lazy").setup({
 
     --- LSP ---
 
+    -- Mason will not install dependencies by default. This installs
+    -- language servers automatically.
+    {
+      "mason-org/mason-lspconfig.nvim",
+      opts = {
+        -- For configuration, see `lspconfig.<LSP>.setup({ ... })`.
+        ensure_installed = { "jedi_language_server", "ruff", "rust_analyzer" },
+      },
+      dependencies = {
+        { "mason-org/mason.nvim", opts = {} },
+        "neovim/nvim-lspconfig",
+      },
+    },
+
     -- TODO: https://github.com/neovim/nvim-lspconfig/issues/3494
     {
       "neovim/nvim-lspconfig",
@@ -520,14 +545,10 @@ require("lazy").setup({
         -- Setup language servers.
         local lspconfig = require("lspconfig")
 
+        -- Those LSPs are installed via Mason. We use the `mason-lspconfig`
+        -- plugin to automatically install them.
+
         -- Rust.
-        --
-        -- ```
-        -- rustup component add rust-analyzer
-        -- ```
-        --
-        --  Commands:
-        --   - `:CargoReload`
         lspconfig.rust_analyzer.setup({
           -- settings = {
           --   ["rust-analyzer"] = {
@@ -537,11 +558,6 @@ require("lazy").setup({
         })
 
         -- Python.
-        --
-        -- ```
-        -- uv tool install ruff@latest
-        -- pipx install jedi-language-server
-        -- ```
         lspconfig.ruff.setup({
           -- init_options = {
           --   settings = {
