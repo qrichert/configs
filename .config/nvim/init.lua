@@ -178,6 +178,7 @@ require("lazy").setup({
             ["ctrl-u"] = "half-page-up",
             ["ctrl-d"] = "half-page-down",
             ["ctrl-x"] = "jump",
+            -- Conflicts with `builtin`.
             -- ["ctrl-f"] = "preview-page-down",
             -- ["ctrl-b"] = "preview-page-up",
           },
@@ -522,14 +523,14 @@ require("lazy").setup({
       end,
     },
 
-    --- LSP ---
+    --- LSP, Completions, et al. ---
 
     -- Mason will not install dependencies by default. This installs
     -- language servers automatically.
     {
       "mason-org/mason-lspconfig.nvim",
       opts = {
-        -- For configuration, see `lspconfig.<LSP>.setup({ ... })`.
+        -- For configuration, see `vim.lsp.enable("...")`.
         ensure_installed = { "jedi_language_server", "ruff", "rust_analyzer" },
       },
       dependencies = {
@@ -538,77 +539,9 @@ require("lazy").setup({
       },
     },
 
-    -- TODO: https://github.com/neovim/nvim-lspconfig/issues/3494
-    {
-      "neovim/nvim-lspconfig",
-      config = function()
-        -- Setup language servers.
-        local lspconfig = require("lspconfig")
-
-        -- Those LSPs are installed via Mason. We use the `mason-lspconfig`
-        -- plugin to automatically install them.
-
-        -- Rust.
-        lspconfig.rust_analyzer.setup({
-          -- settings = {
-          --   ["rust-analyzer"] = {
-          --     cargo = {}
-          --   }
-          -- }
-        })
-
-        -- Python.
-        lspconfig.ruff.setup({
-          -- init_options = {
-          --   settings = {
-          --     -- Server settings should go here.
-          --   }
-          -- }
-        })
-        lspconfig.jedi_language_server.setup({})
-
-        vim.api.nvim_create_autocmd("LspAttach", {
-          group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-          callback = function(ev)
-            -- Buffer local mappings.
-            local opts = { buffer = ev.buf }
-
-            vim.keymap.set("n", "<Leader>d", function()
-              vim.diagnostic.open_float()
-            end, opts)
-
-            -- TODO: Use the defaults and add the to `Vim.md`.
-            -- https://neovim.io/doc/user/news-0.11.html#_defaults
-            -- grn in Normal mode maps to vim.lsp.buf.rename()
-            -- grr in Normal mode maps to vim.lsp.buf.references()
-            -- gri in Normal mode maps to vim.lsp.buf.implementation()
-            -- gO in Normal mode maps to vim.lsp.buf.document_symbol()
-            -- gra in Normal and Visual mode maps to vim.lsp.buf.code_action()
-            -- CTRL-S in Insert and Select mode maps to vim.lsp.buf.signature_help()
-            -- Mouse popup-menu includes an "Open in web browser" item when you right-click on a URL.
-            -- Mouse popup-menu includes a "Go to definition" item when LSP is active in the buffer.
-            -- Mouse popup-menu includes "Show Diagnostics", "Show All Diagnostics" and "Configure Diagnostics" items when there are diagnostics in the buffer.
-            vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-            vim.keymap.set("n", "<Leader>r", vim.lsp.buf.rename, opts)
-            vim.keymap.set({ "n", "v" }, "<Leader>a", vim.lsp.buf.code_action, opts)
-            vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-            vim.keymap.set("n", "<Leader>f", function()
-              vim.lsp.buf.format({ async = true })
-            end, opts)
-
-            local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-            -- Inlay type and parameter hints.
-            vim.lsp.inlay_hint.enable(false) -- Disabled by default, they're noisy.
-            vim.keymap.set("n", "<Leader>h", function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            end)
-          end,
-        })
-      end,
-    },
+    -- Still needed for LSP linkage wizardry. LSPs don't work without
+    -- as of Neovim 0.11.1.
+    { "neovim/nvim-lspconfig" },
 
     -- Auto-completion, inlay hints and method signatures.
     {
@@ -696,6 +629,47 @@ require("lazy").setup({
     -- decrease the frequency of update-checking to once a week
     frequency = 3600 * 24 * 7,
   },
+})
+
+--- LSP ---
+
+-- Setup language servers.
+
+-- Those LSPs are installed via Mason. We use the `mason-lspconfig`
+-- plugin to install them automatically.
+
+-- Rust.
+vim.lsp.enable("rust_analyzer")
+
+-- Python.
+vim.lsp.enable("ruff")
+vim.lsp.enable("jedi_language_server")
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(ev)
+    -- Buffer local mappings.
+    local opts = { buffer = ev.buf }
+
+    vim.keymap.set("n", "<Leader>d", function()
+      vim.diagnostic.open_float()
+    end, opts)
+
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    vim.keymap.set("n", "<Leader>f", function()
+      vim.lsp.buf.format({ async = true })
+    end, opts)
+
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+    -- Inlay type and parameter hints.
+    vim.lsp.inlay_hint.enable(false) -- Disabled by default, they're noisy.
+    vim.keymap.set("n", "<Leader>h", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    end)
+  end,
 })
 
 -- Disable all LSP semantic highlights (in favor of Treesitter).
