@@ -532,6 +532,9 @@ require("lazy").setup({
       opts = {
         -- For configuration, see `vim.lsp.enable("...")`.
         ensure_installed = { "jedi_language_server", "lua_ls", "ruff", "rust_analyzer" },
+        -- Use Mason as a package manager only, we enable them manually
+        -- in the LSP configuration section.
+        automatic_enable = false,
       },
       dependencies = {
         { "mason-org/mason.nvim", opts = {} },
