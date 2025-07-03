@@ -2,6 +2,9 @@
 -- Vim Script, we can re-use the same file for Vim and IdeaVim.
 vim.cmd.source(vim.fs.joinpath(vim.fn.stdpath("config"), "vimrc.vim"))
 
+-- Faster startup times (experimental).
+vim.loader.enable(true)
+
 -- Persist extra column before line numbers (for signs).
 vim.opt.signcolumn = "yes:1"
 
@@ -433,7 +436,6 @@ require("lazy").setup({
             "c",
             "caddy",
             "cpp",
-            "html",
             "css",
             "csv",
             "dockerfile",
@@ -444,9 +446,9 @@ require("lazy").setup({
             "gitattributes",
             "gitcommit",
             "gitignore",
+            "html",
             "javadoc",
             "javascript",
-            "typescript",
             "json",
             -- "latex", -- Requires Treesitter CLI.
             "lua",
@@ -464,6 +466,7 @@ require("lazy").setup({
             "sql",
             "ssh_config",
             "toml",
+            "typescript",
             "vim",
             "vimdoc",
             "xml",
@@ -530,8 +533,24 @@ require("lazy").setup({
     {
       "mason-org/mason-lspconfig.nvim",
       opts = {
-        -- For configuration, see `vim.lsp.enable("...")`.
-        ensure_installed = { "jedi_language_server", "lua_ls", "ruff", "rust_analyzer" },
+        -- For configuration, see `vim.lsp.config("...")`.
+        ensure_installed = {
+          "bashls",
+          "biome",
+          "docker_compose_language_service",
+          "dockerls",
+          "fish_lsp",
+          "gh_actions_ls",
+          -- TODO: See: https://github.com/LaBatata101/sith-language-server
+          "jedi_language_server",
+          "lua_ls",
+          "postgres_lsp",
+          "ruff",
+          "rust_analyzer",
+        },
+        -- Automatically call `vim.lsp.enable("...")` on the LSPs.
+        -- See the LSP section for configuration.
+        automatic_enable = true,
       },
       dependencies = {
         { "mason-org/mason.nvim", opts = {} },
@@ -633,20 +652,12 @@ require("lazy").setup({
 
 --- LSP ---
 
--- Setup language servers.
+-- Configure language servers.
 
 -- Those LSPs are installed via Mason. We use the `mason-lspconfig`
--- plugin to install them automatically.
-
--- Rust.
-vim.lsp.enable("rust_analyzer")
-
--- Python.
-vim.lsp.enable("ruff")
-vim.lsp.enable("jedi_language_server")
+-- plugin to install and enable them automatically.
 
 -- Lua + Neovim API integration.
-vim.lsp.enable("lua_ls")
 vim.lsp.config("lua_ls", {
   on_init = function(client)
     if client.workspace_folders then
