@@ -437,6 +437,15 @@ require("lazy").setup({
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
 
+    -- Auto-pairing.
+    {
+      "windwp/nvim-autopairs",
+      event = "InsertEnter",
+      config = true,
+      -- use opts = {} for passing setup options
+      -- this is equivalent to setup({}) function
+    },
+
     --- Mason ---
 
     -- Mason is a package manager, like `brew` for Neovim. It doesn't
