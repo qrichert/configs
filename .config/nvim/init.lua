@@ -230,6 +230,31 @@ require("lazy").setup({
       end,
     },
 
+    -- Database client.
+    {
+      "kndndrj/nvim-dbee",
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "MattiasMTS/cmp-dbee",
+      },
+      build = function()
+        -- Install tries to automatically detect the install method.
+        -- if it fails, try calling it with one of these parameters:
+        --    "curl", "wget", "bitsadmin", "go"
+        require("dbee").install()
+      end,
+      config = function()
+        -- `persistence.json` is in `~/.local/state/nvim/dbee/`:
+        --     require("dbee.sources").FileSource:new(vim.fn.stdpath("state") .. "/dbee/persistence.json"),
+        require("dbee").setup(--[[optional config]])
+      end,
+    },
+    {
+      "MattiasMTS/cmp-dbee",
+      ft = "sql", -- optional but good to have
+      opts = {}, -- needed
+    },
+
     -- Git integration (`:Gitsigns`).
     {
       "lewis6991/gitsigns.nvim",
@@ -566,6 +591,8 @@ require("lazy").setup({
     {
       "saghen/blink.cmp",
 
+      dependencies = { "saghen/blink.compat" },
+
       -- use a release tag to download pre-built binaries
       version = "1.*",
 
@@ -611,6 +638,15 @@ require("lazy").setup({
         -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
           default = { "lsp", "path", "snippets", "buffer" },
+
+          -- For Dbee, see https://github.com/MattiasMTS/cmp-dbee/issues/29
+          per_filetype = {
+            -- Dbee
+            sql = { "dbee", "buffer" }, -- Add any other source to include here
+          },
+          providers = {
+            dbee = { name = "cmp-dbee", module = "blink.compat.source" },
+          },
         },
 
         -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
@@ -621,6 +657,16 @@ require("lazy").setup({
         fuzzy = { implementation = "prefer_rust_with_warning" },
       },
       opts_extend = { "sources.default" },
+    },
+    -- Compatibility with `nvim-cmp` plugins.
+    {
+      "saghen/blink.compat",
+      -- use v2.* for blink.cmp v1.*
+      version = "2.*",
+      -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+      lazy = true,
+      -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+      opts = {},
     },
 
     -- Rust.
