@@ -111,6 +111,38 @@ require("lazy").setup({
   spec = {
     -- add your plugins here
 
+    {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      event = "InsertEnter",
+      config = function()
+        require("copilot").setup({
+          panel = {
+            keymap = {
+              -- jump_prev = "[[",
+              -- jump_next = "]]",
+              -- accept = "<CR>",
+              -- refresh = "gr",
+              -- open = "<M-CR>",
+            },
+            layout = { position = "right" },
+          },
+        })
+      end,
+    },
+    {
+      "CopilotC-Nvim/CopilotChat.nvim",
+      dependencies = {
+        { "zbirenbaum/copilot.lua" },
+        { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+      },
+      build = "make tiktoken", -- Only on MacOS or Linux
+      opts = {
+        -- See Configuration section for options
+      },
+      -- See Commands section for default commands if you want to lazy load on them
+    },
+
     -- Better `%`.
     --
     -- Detects blocks more accurately, and:
@@ -754,3 +786,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
   vim.api.nvim_set_hl(0, group, {})
 end
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "BlinkCmpMenuOpen",
+  callback = function()
+    vim.b.copilot_suggestion_hidden = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "BlinkCmpMenuClose",
+  callback = function()
+    vim.b.copilot_suggestion_hidden = false
+  end,
+})
