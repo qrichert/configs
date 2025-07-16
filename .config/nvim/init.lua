@@ -492,6 +492,7 @@ require("lazy").setup({
             "rust",
             "sql",
             "ssh_config",
+            "terraform",
             "toml",
             "typescript",
             "vim",
@@ -562,6 +563,7 @@ require("lazy").setup({
       opts = {
         -- For configuration, see `vim.lsp.config("...")`.
         ensure_installed = {
+          "ansiblels",
           "bashls",
           "biome",
           "docker_compose_language_service",
@@ -574,6 +576,7 @@ require("lazy").setup({
           "postgres_lsp",
           "ruff",
           "rust_analyzer",
+          "terraformls",
         },
         -- Automatically call `vim.lsp.enable("...")` on the LSPs.
         -- See the LSP section for configuration.
