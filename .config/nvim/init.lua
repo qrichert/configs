@@ -119,21 +119,10 @@ require("lazy").setup({
     -- - `[%`/`]%` Go to previous/next block open/close.
     { "andymass/vim-matchup", event = { "BufReadPre" } },
 
-    -- Markdown preview.
-    --
-    -- Commands:
-    --  - `:LivePreview start`
-    {
-      "brianhuster/live-preview.nvim",
-      dependencies = {
-        "ibhagwan/fzf-lua",
-      },
-    },
-
     -- Reopen files at last edit position.
     { "farmergreg/vim-lastplace", lazy = false },
 
-    -- Support for TODO commends.
+    -- Support for TODO comments.
     {
       "folke/todo-comments.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
@@ -358,34 +347,6 @@ require("lazy").setup({
         -- suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
         -- log_level = 'debug',
       },
-    },
-
-    -- Articifial padding on the left to center text.
-    --
-    -- Also works as a scratchpad.
-    {
-      "shortcuts/no-neck-pain.nvim",
-      version = "*",
-      config = function()
-        vim.keymap.set("", "<Leader>z", "<Cmd>NoNeckPain<CR>")
-        require("no-neck-pain").setup({
-          width = 90,
-          buffers = {
-            right = {
-              enabled = false,
-            },
-            scratchPad = {
-              enabled = true,
-              fileName = ".scratchpad",
-              -- Set to `nil` to default to current working directory.
-              location = "~/.config/nvim/",
-            },
-            bo = {
-              filetype = "md",
-            },
-          },
-        })
-      end,
     },
 
     -- Edit your filesystem like a buffer.
