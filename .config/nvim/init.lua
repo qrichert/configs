@@ -572,6 +572,7 @@ require("lazy").setup({
           "gh_actions_ls",
           -- TODO: See: https://github.com/LaBatata101/sith-language-server
           "jedi_language_server",
+          "just",
           "lua_ls",
           "postgres_lsp",
           "ruff",
