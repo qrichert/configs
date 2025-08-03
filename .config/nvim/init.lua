@@ -42,7 +42,9 @@ local function smart_format()
     }
   elseif
     filetype == "javascript"
+    or filetype == "javascriptreact"
     or filetype == "typescript"
+    or filetype == "typescriptreact"
     or filetype == "html"
     or filetype == "css"
     or filetype == "yaml"
@@ -566,6 +568,8 @@ require("lazy").setup({
           "ansiblels",
           "bashls",
           "biome",
+          -- TODO: Replace both with `docker_language_server` (https://github.com/docker/docker-language-server)
+          -- once it's supported in Mason (it's in Go instead of TS and made by Docker).
           "docker_compose_language_service",
           "dockerls",
           "fish_lsp",
@@ -575,9 +579,13 @@ require("lazy").setup({
           "just",
           "lua_ls",
           "postgres_lsp",
+          "pyright",
           "ruff",
           "rust_analyzer",
+          "tailwindcss",
           "terraformls",
+          "ts_ls",
+          "yamlls",
         },
         -- Automatically call `vim.lsp.enable("...")` on the LSPs.
         -- See the LSP section for configuration.
