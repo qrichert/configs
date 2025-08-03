@@ -24,6 +24,7 @@ if command -v bat > /dev/null
 end
 
 alias vim="nvim"
+alias j="just"
 alias git="LANG=en_US.UTF-8 $(which git)"
 alias gti="git"
 alias pra="pre-commit run --all-files"
