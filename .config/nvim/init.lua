@@ -432,13 +432,32 @@ require("lazy").setup({
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
 
-    -- Auto-pairing.
+    -- Auto-pairing (quotes, parentheses, brackets).
     {
       "windwp/nvim-autopairs",
       event = "InsertEnter",
       config = true,
       -- use opts = {} for passing setup options
       -- this is equivalent to setup({}) function
+    },
+
+    -- Auto-pairing (HTML tags).
+    {
+      "windwp/nvim-ts-autotag",
+      lazy = false,
+      config = function()
+        require("nvim-ts-autotag").setup({
+          opts = {
+            enable_close = true, -- Auto close tags
+            enable_rename = true, -- Auto rename pairs of tags
+            enable_close_on_slash = true, -- Auto close on trailing </
+          },
+          per_filetype = {
+            -- You can override individual settings per filetype
+            -- ["html"] = { enable_close = false },
+          },
+        })
+      end,
     },
 
     --- Mason ---
@@ -496,6 +515,7 @@ require("lazy").setup({
             "ssh_config",
             "terraform",
             "toml",
+            "tsx",
             "typescript",
             "vim",
             "vimdoc",
@@ -547,7 +567,7 @@ require("lazy").setup({
           },
 
           matchup = {
-            -- Required for vim-matchup to work with Treesitter.
+            -- Required for `vim-matchup` to work with Treesitter.
             enable = true,
             -- Do not use virtual text to highlight the end of a block.
             disable_virtual_text = true,
