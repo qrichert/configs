@@ -41,11 +41,12 @@
 	chdf = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
 	fixup = commit -a --fixup
 	fx = commit -a --fixup HEAD
-	la = log --patch
-	lg = log --color --graph --pretty=format:'%C(bold dim white)%h%Creset -%C(bold green)%d%Creset %s %C(bold green)(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lp = log --patch
+	lg = log --color --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%C(bold red)%d%Creset %s %C(bold green)(%ci) %C(bold blue)<%an>%Creset'
 	ll = log --oneline --graph
+	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
 	llfp = log --oneline --graph --first-parent
-	lm = log --oneline --decorate=auto --author='Quentin Richert'
+	lme = log --oneline --decorate=auto --author='Quentin Richert'
 	p = push
 	pf = push --force
 	rb = rebase
