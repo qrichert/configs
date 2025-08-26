@@ -48,6 +48,7 @@ local function smart_format()
     or filetype == "html"
     or filetype == "css"
     or filetype == "yaml"
+    or filetype == "json"
   then
     label = "prettier"
     cmds = { { "prettier", "--write", "--prose-wrap=always", "--print-width=72", filepath } }
