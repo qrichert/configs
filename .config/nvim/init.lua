@@ -430,6 +430,8 @@ require("lazy").setup({
       opts = {
         -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
         skip_confirm_for_simple_edits = true,
+        -- Set to true to watch the filesystem for changes and reload oil.
+        watch_for_changes = true,
         view_options = {
           -- Show files and directories that start with "."
           show_hidden = true,
