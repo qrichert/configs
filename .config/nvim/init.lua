@@ -224,6 +224,9 @@ require("lazy").setup({
       -- optional for icon support
       dependencies = { "nvim-tree/nvim-web-devicons" },
       opts = {
+        -- Keep the `fzf` process running in the background allowing
+        -- `:FzfLua resume` to restore the picker state entirely.
+        "hide",
         keymap = {
           -- Targets `fzf-lua`'s UI (preview windows, etc.).
           builtin = {
@@ -301,7 +304,7 @@ require("lazy").setup({
       config = function()
         -- `persistence.json` is in `~/.local/state/nvim/dbee/`:
         --     require("dbee.sources").FileSource:new(vim.fn.stdpath("state") .. "/dbee/persistence.json"),
-        require("dbee").setup(--[[optional config]])
+        require("dbee").setup( --[[optional config]])
       end,
     },
     {
