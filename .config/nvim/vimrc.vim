@@ -60,6 +60,7 @@ autocmd BufEnter *.yaml,*.yml setlocal tabstop=2 shiftwidth=2
 nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>w <Cmd>w<CR>
 nnoremap <Leader>q <Cmd>bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <Leader>b <Cmd>windo set scrollbind!<CR>
 
 " Quickfix mappings.
 nnoremap <C-j> <Cmd>cnext<CR>
