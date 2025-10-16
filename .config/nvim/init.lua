@@ -86,6 +86,10 @@ vim.keymap.set("n", "<Leader>xf", smart_format, { desc = "Smart formatter." })
 
 --- Plugins ---
 
+-- Note: Add this Cron job to keep plugins up-to-date:
+-- ## Update Nvim plugins
+-- @daily nvim --headless "+Lazy! sync" +qa
+
 -- Bootstrap lazy.nvim.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
