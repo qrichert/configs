@@ -14,6 +14,14 @@ if [[ -f ~/.deezfish.fish ]]; then
     cat ~/.deezfish.fish >> ~/.config/fish/config.fish
 fi
 
+# Trim Neovim config on low-powered machines.
+nb_cpu_cores=$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 0)
+if (( $nb_cpu_cores < 2 )); then
+    [[ -n $DEEZ_VERBOSE ]] && echo "Low-powered machine: trimming Neovim \`init.lua\` to minimal config."
+    sed '/-- END OF MINIMAL CONFIG --/q' ~/.config/nvim/init.lua > /tmp/init.lua
+    mv /tmp/init.lua ~/.config/nvim/init.lua
+fi
+
 # Alias SSH terminfo for Ghostty.
 if ! grep -qF "SetEnv TERM=xterm-256color" ~/.ssh/config; then
     [[ -n $DEEZ_VERBOSE ]] && echo "Alias SSH terminfo for Ghostty."

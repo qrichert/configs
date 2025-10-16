@@ -23,6 +23,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 
+-- END OF MINIMAL CONFIG --
+
 -- Run formatters based on file type.
 local function smart_format()
   local filetype = vim.bo.filetype
