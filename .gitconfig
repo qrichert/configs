@@ -21,8 +21,8 @@
 	prompt = false
 [mergetool "nvimdiff"]
 	layout = LOCAL,MERGED,REMOTE
-[blame]
-	ignoreRevsFile = .git-blame-ignore-revs
+; [blame]
+; 	ignoreRevsFile = .git-blame-ignore-revs
 [url "git@github.com:"]
 	insteadOf = gh:
 [url "ssh://misc/~/"]
