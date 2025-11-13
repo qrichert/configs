@@ -160,6 +160,15 @@ require("lazy").setup({
     -- - `[%`/`]%` Go to previous/next block open/close.
     { "andymass/vim-matchup", event = { "BufReadPre" } },
 
+    -- Emacs-like narrow region.
+    --
+    -- Trigger with `:NR`, Narrow Region (`:NR!` will narrow current
+    -- window) or `<Leader>nr` (`<Leader>Nr` for current window).
+    --
+    -- Write changes back with `:w` or `:WR`, Widen Region (`:WR!` will
+    -- also close the window or go back.)
+    { "chrisbra/NrrwRgn" },
+
     {
       "derektata/lorem.nvim",
       config = function()
