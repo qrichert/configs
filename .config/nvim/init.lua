@@ -161,32 +161,13 @@ require("lazy").setup({
     { "andymass/vim-matchup", event = { "BufReadPre" } },
 
     {
-      "jinh0/eyeliner.nvim",
+      "derektata/lorem.nvim",
       config = function()
-        require("eyeliner").setup({
-          -- Show highlights only after keypress.
-          highlight_on_key = true,
-
-          -- Dim all other characters if set to true (recommended!).
-          dim = true,
-
-          -- Set the maximum number of characters eyeliner.nvim will check from
-          -- your current cursor position; this is useful if you are dealing with
-          -- large files: See https://github.com/jinh0/eyeliner.nvim/issues/41
-          max_length = 9999,
-
-          -- Filetypes for which eyeliner should be disabled;
-          -- e.g., to disable on help files:
-          -- disabled_filetypes = {"help"}
-          disabled_filetypes = {},
-
-          -- Buftypes for which eyeliner should be disabled;
-          -- e.g., disabled_buftypes = {"nofile"}
-          disabled_buftypes = {},
-
-          -- Add eyeliner to f/F/t/T keymaps;
-          -- See section on advanced configuration for more information.
-          default_keymaps = true,
+        require("lorem").opts({
+          sentence_length = "mixed", -- using a default configuration
+          comma_chance = 0.3, -- 30% chance to insert a comma
+          max_commas = 2, -- maximum 2 commas per sentence
+          debounce_ms = 200, -- default debounce time in milliseconds
         })
       end,
     },
@@ -290,6 +271,37 @@ require("lazy").setup({
       lazy = false,
       config = function()
         vim.o.showmode = false -- Redundant.
+      end,
+    },
+
+    {
+      "jinh0/eyeliner.nvim",
+      config = function()
+        require("eyeliner").setup({
+          -- Show highlights only after keypress.
+          highlight_on_key = true,
+
+          -- Dim all other characters if set to true (recommended!).
+          dim = true,
+
+          -- Set the maximum number of characters eyeliner.nvim will check from
+          -- your current cursor position; this is useful if you are dealing with
+          -- large files: See https://github.com/jinh0/eyeliner.nvim/issues/41
+          max_length = 9999,
+
+          -- Filetypes for which eyeliner should be disabled;
+          -- e.g., to disable on help files:
+          -- disabled_filetypes = {"help"}
+          disabled_filetypes = {},
+
+          -- Buftypes for which eyeliner should be disabled;
+          -- e.g., disabled_buftypes = {"nofile"}
+          disabled_buftypes = {},
+
+          -- Add eyeliner to f/F/t/T keymaps;
+          -- See section on advanced configuration for more information.
+          default_keymaps = true,
+        })
       end,
     },
 
