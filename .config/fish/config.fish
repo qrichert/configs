@@ -37,6 +37,17 @@ export LESS="-R -F -X"
 export PRE_COMMIT_ALLOW_NO_CONFIG=1
 export CRONRUNNER_ENV="$HOME/.cron.env"
 
+function localip
+    switch (uname)
+        case Darwin # macOS
+            ipconfig getifaddr (route get default | awk '/interface: /{print $2}')
+        case Linux # Linux
+            ip route get 1 | awk '{print $7}'
+        case '*'
+            echo "Unsupported OS"
+    end
+end
+
 function history
     builtin history --show-time='%h/%d - %H:%M:%S ' | tail -r
 end
