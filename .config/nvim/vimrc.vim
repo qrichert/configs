@@ -88,8 +88,8 @@ noremap! <C-k> <Up>
 noremap! <C-l> <Right>
 
 " Use left and right arrows to navigate and open buffers.
-nnoremap <Left> <Cmd>bnext<CR>
-nnoremap <Right> <Cmd>bprevious<CR>
+nnoremap <Left> <Cmd>bprevious<CR>
+nnoremap <Right> <Cmd>bnext<CR>
 nnoremap <Leader><Left> <Cmd>buffers<CR>
 nnoremap <Leader><Right> <Cmd>Oil<CR>
 " Use up and down arrows to navigate and create tabs.
