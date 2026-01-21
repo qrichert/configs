@@ -492,6 +492,9 @@ require("lazy").setup({
       end,
     },
 
+    -- Cased substitutions (`:S`) and case toggling (e.g., `crc` snake to camel).
+    { "tpope/vim-abolish" },
+
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
 
