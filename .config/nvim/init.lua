@@ -495,6 +495,9 @@ require("lazy").setup({
     -- Cased substitutions (`:S`) and case toggling (e.g., `crc` snake to camel).
     { "tpope/vim-abolish" },
 
+    -- Repeat.vim remaps `.` in a way that plugins can tap into it.
+    { "tpope/vim-repeat" },
+
     -- Change surrounding elements (e.g., replace `'` with `"`: `cs'"`).
     { "tpope/vim-surround" },
 
