@@ -498,6 +498,9 @@ require("lazy").setup({
     -- Repeat.vim remaps `.` in a way that plugins can tap into it.
     { "tpope/vim-repeat" },
 
+    -- Make <C-a> and <C-x> work with dates, times, and more.
+    { "tpope/vim-speeddating"},
+
     -- Change surrounding elements (e.g., replace `'` with `"`: `cs'"`).
     { "tpope/vim-surround" },
 
