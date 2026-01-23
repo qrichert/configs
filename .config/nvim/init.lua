@@ -120,6 +120,9 @@ require("lazy").setup({
   spec = {
     -- add your plugins here
 
+    -- `lazy = true` → Load this only if something asks for it.
+    -- `event = "VeryLazy"` → Load this eventually, just not during startup.
+
     {
       "zbirenbaum/copilot.lua",
       cmd = "Copilot",
@@ -141,6 +144,7 @@ require("lazy").setup({
     },
     {
       "CopilotC-Nvim/CopilotChat.nvim",
+      event = "VeryLazy",
       dependencies = {
         { "zbirenbaum/copilot.lua" },
         { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
@@ -167,10 +171,11 @@ require("lazy").setup({
     --
     -- Write changes back with `:w` or `:WR`, Widen Region (`:WR!` will
     -- also close the window or go back.)
-    { "chrisbra/NrrwRgn" },
+    { "chrisbra/NrrwRgn", event = "VeryLazy" },
 
     {
       "derektata/lorem.nvim",
+      event = "VeryLazy",
       config = function()
         require("lorem").opts({
           sentence_length = "mixed", -- using a default configuration
@@ -187,6 +192,7 @@ require("lazy").setup({
     -- Support for TODO comments.
     {
       "folke/todo-comments.nvim",
+      event = "VeryLazy",
       dependencies = { "nvim-lua/plenary.nvim" },
       opts = {},
       config = function(_, opts)
@@ -198,6 +204,7 @@ require("lazy").setup({
     -- Quick navigation.
     {
       "ggandor/leap.nvim",
+      event = "VeryLazy",
       config = function()
         vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
         vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
@@ -283,8 +290,10 @@ require("lazy").setup({
       end,
     },
 
+    -- Move faster with unique f/F indicators for each word on the line.
     {
       "jinh0/eyeliner.nvim",
+      event = "VeryLazy",
       config = function()
         require("eyeliner").setup({
           -- Show highlights only after keypress.
@@ -317,6 +326,7 @@ require("lazy").setup({
     -- Database client.
     {
       "kndndrj/nvim-dbee",
+      event = "VeryLazy",
       dependencies = {
         "MunifTanjim/nui.nvim",
         "MattiasMTS/cmp-dbee",
@@ -425,6 +435,7 @@ require("lazy").setup({
     -- Auto-`cd` to Git root.
     {
       "notjedi/nvim-rooter.lua",
+      lazy = false,
       config = function()
         require("nvim-rooter").setup()
       end,
@@ -434,7 +445,6 @@ require("lazy").setup({
     {
       "rmagatti/auto-session",
       lazy = false,
-
       ---enables autocomplete for opts
       ---@module "auto-session"
       ---@type AutoSession.Config
@@ -493,16 +503,16 @@ require("lazy").setup({
     },
 
     -- Cased substitutions (`:S`) and case toggling (e.g., `crc` snake to camel).
-    { "tpope/vim-abolish" },
+    { "tpope/vim-abolish", event = "VeryLazy" },
 
     -- Repeat.vim remaps `.` in a way that plugins can tap into it.
-    { "tpope/vim-repeat" },
+    { "tpope/vim-repeat", event = "VeryLazy" },
 
     -- Make <C-a> and <C-x> work with dates, times, and more.
-    { "tpope/vim-speeddating"},
+    { "tpope/vim-speeddating", event = "VeryLazy" },
 
     -- Change surrounding elements (e.g., replace `'` with `"`: `cs'"`).
-    { "tpope/vim-surround" },
+    { "tpope/vim-surround", event = "VeryLazy" },
 
     -- Wakatime time tracking (`:WakaTime[Today]`).
     { "wakatime/vim-wakatime", lazy = false },
@@ -519,7 +529,7 @@ require("lazy").setup({
     -- Auto-pairing (HTML tags).
     {
       "windwp/nvim-ts-autotag",
-      lazy = false,
+      lazy = false, -- Plugin handles it well (as per the docs).
       config = function()
         require("nvim-ts-autotag").setup({
           opts = {
@@ -541,6 +551,7 @@ require("lazy").setup({
     -- install packages on its own by default.
     {
       "mason-org/mason.nvim",
+      event = "VeryLazy", -- This is Mason's UI.
       opts = {},
     },
 
@@ -704,6 +715,7 @@ require("lazy").setup({
     -- language servers automatically.
     {
       "mason-org/mason-lspconfig.nvim",
+      event = "VeryLazy", -- Not part of initial rendering.
       opts = {
         -- For configuration, see `vim.lsp.config("...")`.
         ensure_installed = {
@@ -741,7 +753,7 @@ require("lazy").setup({
 
     -- Still needed for LSP linkage wizardry. LSPs don't work without
     -- as of Neovim 0.11.1.
-    { "neovim/nvim-lspconfig" },
+    { "neovim/nvim-lspconfig", event = "BufReadPre" },
 
     -- Auto-completion, inlay hints and method signatures.
     {
