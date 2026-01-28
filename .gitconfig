@@ -51,7 +51,7 @@
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
 	p = push
 	pf = push --force
-	rb = rebase
+	rb = rebase --committer-date-is-author-date
 	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
 	rs = restore
 	rt = reset
