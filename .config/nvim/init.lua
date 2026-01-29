@@ -689,10 +689,7 @@ require("lazy").setup({
           "ansiblels",
           "bashls",
           "biome",
-          -- TODO: Replace both with `docker_language_server` (https://github.com/docker/docker-language-server)
-          -- once it's supported in Mason (it's in Go instead of TS and made by Docker).
-          "docker_compose_language_service",
-          "dockerls",
+          "docker_language_server",
           "fish_lsp",
           "gh_actions_ls",
           -- TODO: See: https://github.com/LaBatata101/sith-language-server
