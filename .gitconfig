@@ -51,13 +51,16 @@
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
 	p = push
 	pf = push --force
+	mc = merge --continue
 	rb = rebase --committer-date-is-author-date
+	rbc = git rebase --continue
 	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
 	rs = restore
 	rt = reset
 	st = status
 	sw = switch
 	pick = cherry-pick
+	pickc = cherry-pick --continue
 	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
 	changelog = tag -n9999999 --sort=-v:refname
 	# https://stackoverflow.com/questions/8475448/find-merge-commit-which-includes-a-specific-commit
