@@ -27,9 +27,9 @@ alias vim="nvim"
 alias j="just"
 alias git="LANG=en_US.UTF-8 $(which git)"
 alias gti="git"
-alias pra="pre-commit run --all-files"
+alias pra="prek run --all-files"
 alias pr=":"
-alias prettier="prettier --write --prose-wrap=always --print-width=72"
+alias prettier="npx prettier --write --prose-wrap=always --print-width=72"
 
 export EDITOR=nvim
 export LESSCHARSET="UTF-8"
