@@ -41,6 +41,7 @@
 	cdf = diff --cached
 	wdf = diff --color-words
 	chdf = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
+	bindiff = diff --text
 	fixup = commit -a --fixup
 	fx = commit -a --fixup HEAD
 	lp = log --patch
