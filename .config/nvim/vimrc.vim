@@ -97,3 +97,11 @@ nnoremap <Up> <Cmd>tabnext<CR>
 nnoremap <Down> <Cmd>tabprevious<CR>
 nnoremap <Leader><Up> <Cmd>tabnew<CR>
 nnoremap <Leader><Down> <Cmd>tabs<CR>
+
+" Custom commands.
+
+" Join two same-length Markdown table columns. Columns must be separated
+" by an empty line. Sometimes when you copy-paste tables, it pastes one
+" column after the next. This commands puts them side-by-side.
+" This command assumes the cursor to be top left of the first column.
+command! JoinMdCols execute "normal! ))<C-v>)kI | <Esc>((<C-v>)k$d)hP"
