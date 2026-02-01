@@ -39,7 +39,7 @@ local function smart_format()
   elseif filetype == "python" then
     label = "ruff format"
     cmds = {
-      { "ruff", "check", "--fix", "--select=I", filepath },
+      { "ruff", "check", "--fix", "--extend-select=I", "--extend-select=D300", filepath },
       { "ruff", "format", filepath },
     }
   elseif
