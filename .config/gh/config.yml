@@ -13,6 +13,8 @@ pager: less
 # Aliases allow you to create nicknames for gh commands
 aliases:
     co: pr checkout
+    i: issue list
+    v: issue view
     homework: issue list --assignee @me
     reviews: pr list --assignee @me
 # The path to a unix socket through which to send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
