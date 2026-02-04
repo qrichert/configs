@@ -123,6 +123,13 @@ require("lazy").setup({
     -- `lazy = true` → Load this only if something asks for it.
     -- `event = "VeryLazy"` → Load this eventually, just not during startup.
 
+    -- Switch between single-line and multiline forms of code.
+    --
+    -- - `gS` to split a one-liner into multiple lines
+    -- - `gJ` (with the cursor on the first line of a block) to join a
+    --   block into a single-line statement.
+    { "AndrewRadev/splitjoin.vim", event = { "VeryLazy" } },
+
     -- Better `%`.
     --
     -- Detects blocks more accurately, and:
