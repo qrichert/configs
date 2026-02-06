@@ -1,0 +1,41 @@
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git commit"
+decision = "deny"
+priority = 500
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git add"
+decision = "deny"
+priority = 500
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git push"
+decision = "deny"
+priority = 500
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git merge"
+decision = "deny"
+priority = 500
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git rebase"
+decision = "deny"
+priority = 500
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git status"
+decision = "allow"
+priority = 999
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "git diff"
+decision = "allow"
+priority = 999
