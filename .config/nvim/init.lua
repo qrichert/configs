@@ -704,12 +704,16 @@ require("lazy").setup({
           "just",
           "lua_ls",
           "postgres_lsp",
-          "pyright",
           "ruff",
           "rust_analyzer",
           "tailwindcss",
           "terraformls",
           "ts_ls",
+          -- Better than pyright, but jedi still wins with Django.
+          -- Having both enabled is a pain, duplicated info and makes
+          -- go-to-definition annoying by opening quickfix with
+          -- duplicated paths.
+          -- "ty",
           "yamlls",
         },
         -- Automatically call `vim.lsp.enable("...")` on the LSPs.
