@@ -226,7 +226,8 @@ require("lazy").setup({
         fzf.setup(opts)
 
         vim.keymap.set("n", "<Leader>s", function()
-          fzf.grep_project()
+          -- Add `--multiline` to support `\n`.
+          fzf.grep_project({ cmd = "rg --line-number --column --multiline" })
         end, { desc = "fzf-lua: grep project (rg)" })
 
         vim.keymap.set("n", "<Leader>p", function()
