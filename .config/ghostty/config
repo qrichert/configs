@@ -11,3 +11,5 @@ window-height = 24
 
 window-theme = dark
 macos-titlebar-style = tabs
+
+keybind = global:cmd+m=toggle_quick_terminal
