@@ -520,6 +520,87 @@ require("lazy").setup({
       end,
     },
 
+    --- DAP ---
+
+    -- Debug Adapter Protocol (DAP) integration.
+    --
+    -- Note: `nvim-dap` natively reads `.vscode/launch.json`.
+    --
+    -- Keymaps:
+    --  - `<Leader>b`  Toggle breakpoint.
+    --  - `<Leader>gc` Run to cursor.
+    --  - `<Leader>?`  Evaluate variable under cursor.
+    --  - `<Leader>dm` Test method (Python).
+    --  - `<Leader>dc` Test class (Python).
+    --  - `<F1>`       Run in Debug/Continue.
+    --  - `<F2>`       Step into.
+    --  - `<F3>`       Step over.
+    --  - `<F4>`       Step out.
+    --  - `<F5>`       Step back.
+    --  - `<F13>`      Restart.
+    {
+      "mfussenegger/nvim-dap",
+      dependencies = {
+        "rcarriga/nvim-dap-ui",
+        "theHamsta/nvim-dap-virtual-text",
+        "nvim-neotest/nvim-nio",
+        "williamboman/mason.nvim",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        "mfussenegger/nvim-dap-python",
+      },
+      event = "VeryLazy",
+      config = function()
+        local dap = require("dap")
+        local ui = require("dapui")
+
+        ui.setup()
+
+        require("nvim-dap-virtual-text").setup({})
+
+        require("mason-tool-installer").setup({
+          ensure_installed = { "debugpy" },
+        })
+
+        local debugpy_python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+        require("dap-python").setup(debugpy_python)
+
+        vim.keymap.set("n", "<Leader>b", dap.toggle_breakpoint)
+        vim.keymap.set("n", "<Leader>gc", dap.run_to_cursor)
+
+        -- Eval var under cursor
+        vim.keymap.set("n", "<Leader>?", function()
+          ui.eval(nil, { enter = true })
+        end)
+
+        vim.keymap.set("n", "<Leader>dm", function()
+          require("dap-python").test_method()
+        end)
+        vim.keymap.set("n", "<Leader>dc", function()
+          require("dap-python").test_class()
+        end)
+
+        vim.keymap.set("n", "<F1>", dap.continue)
+        vim.keymap.set("n", "<F2>", dap.step_into)
+        vim.keymap.set("n", "<F3>", dap.step_over)
+        vim.keymap.set("n", "<F4>", dap.step_out)
+        vim.keymap.set("n", "<F5>", dap.step_back)
+        vim.keymap.set("n", "<F13>", dap.restart)
+
+        dap.listeners.before.attach.dapui_config = function()
+          ui.open()
+        end
+        dap.listeners.before.launch.dapui_config = function()
+          ui.open()
+        end
+        dap.listeners.before.event_terminated.dapui_config = function()
+          ui.close()
+        end
+        dap.listeners.before.event_exited.dapui_config = function()
+          ui.close()
+        end
+      end,
+    },
+
     --- Mason ---
 
     -- Mason is a package manager, like `brew` for Neovim. It doesn't

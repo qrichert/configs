@@ -61,7 +61,7 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>w <Cmd>w<CR>
 nnoremap <Leader>q <Cmd>bp<Bar>sp<Bar>bn<Bar>bd<CR>
 nnoremap <Leader>Q <Cmd>%bd!<Bar>e#<Bar>bd#<CR>
-nnoremap <Leader>b <Cmd>windo set scrollbind! cursorbind!<CR>
+nnoremap <Leader>B <Cmd>windo set scrollbind! cursorbind!<CR>
 
 " Quickfix mappings.
 nnoremap <C-j> <Cmd>cnext<CR>
