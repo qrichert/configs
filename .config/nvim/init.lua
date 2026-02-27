@@ -23,6 +23,16 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 
+-- Filetypes
+vim.filetype.add({
+  extension = {
+    caddy = "caddy",
+  },
+  filename = {
+    Caddyfile = "caddy",
+  },
+})
+
 -- END OF MINIMAL CONFIG --
 
 -- Run formatters based on file type.
