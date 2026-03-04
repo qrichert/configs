@@ -30,6 +30,8 @@
 [alias]
 	a = add .
 	br = branch
+	# List branches without remote counterpart.
+	brgone = "!LC_ALL=C git fetch --prune && LC_ALL=C git branch -vv | grep \": gone]\" | awk \"{print \\$1}\""
 	ci = commit
 	eci = commit --allow-empty
 	c = commit -a --allow-empty-message --no-edit
