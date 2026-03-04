@@ -6,9 +6,17 @@
   },
   "general": {
     "vimMode": true,
-    "previewFeatures": true
+    "previewFeatures": true,
+    "sessionRetention": {
+      "warningAcknowledged": true,
+      "enabled": true,
+      "maxAge": "30d"
+    }
   },
   "context": {
-    "fileName": ["AGENTS.md", "GEMINI.md"]
+    "fileName": [
+      "AGENTS.md",
+      "GEMINI.md"
+    ]
   }
 }
