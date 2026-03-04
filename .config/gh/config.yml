@@ -14,7 +14,7 @@ pager: less
 aliases:
     co: pr checkout
     i: issue list
-    v: issue view
+    v: issue view --comments
     homework: issue list --assignee @me
     reviews: pr list --assignee @me
 # The path to a unix socket through which to send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
