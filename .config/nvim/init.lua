@@ -427,6 +427,12 @@ require("lazy").setup({
     },
 
     -- Restore last session's open files for the current directory.
+    --
+    -- Commands:
+    -- - `:AutoSession search`
+    -- - `:AutoSession delete`
+    -- - `:AutoSession deletePicker`
+    -- - `:AutoSession purgeOrphaned`
     {
       "rmagatti/auto-session",
       lazy = false,
@@ -437,6 +443,10 @@ require("lazy").setup({
         -- suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
         -- log_level = 'debug',
       },
+      config = function(_, opts)
+        vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+        require("auto-session").setup(opts)
+      end,
     },
 
     -- Edit your filesystem like a buffer.
