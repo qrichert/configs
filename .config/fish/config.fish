@@ -30,6 +30,7 @@ alias gti="git"
 alias pra="prek run --all-files"
 alias pr=":"
 alias prettier="npx prettier --write --prose-wrap=always --print-width=72"
+alias claude="claude --allow-dangerously-skip-permissions"
 
 export EDITOR=nvim
 export LESSCHARSET="UTF-8"
