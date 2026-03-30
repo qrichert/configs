@@ -850,7 +850,7 @@ require("lazy").setup({
         -- "none" for no mappings
         --
         -- All presets have the following mappings (vim.keymap.set):
-        -- C-space: Open menu or open docs if already open
+        -- C-space: Open menu or open docs if already open (`C-w` for us)
         -- C-n/C-p or Up/Down: Select next/previous item
         -- C-f/C-b: Scroll documentation down/up.
         -- C-e: Hide menu
@@ -1007,6 +1007,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<Leader>d", function()
       vim.diagnostic.open_float()
     end, opts)
+
+    -- These GLOBAL keymaps are created unconditionally when Nvim starts:
+    -- - "grn" is mapped in Normal mode to `vim.lsp.buf.rename()`
+    -- - "gra" is mapped in Normal and Visual mode to `vim.lsp.buf.code_action()`
+    -- - "grr" is mapped in Normal mode to `vim.lsp.buf.references()`
+    -- - "gri" is mapped in Normal mode to `vim.lsp.buf.implementation()`
+    -- - "grt" is mapped in Normal mode to `vim.lsp.buf.type_definition()`
+    -- - "gO" is mapped in Normal mode to `vim.lsp.buf.document_symbol()`
+    -- - CTRL-S is mapped in Insert mode to `vim.lsp.buf.signature_help()`
 
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
