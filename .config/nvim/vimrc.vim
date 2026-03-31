@@ -23,6 +23,8 @@ set autowrite               " Auto-save files before commands like `:!` or `:mak
 set autoread                " Auto-reload files if changed on disk.
 set undofile                " Persist undo history across sessions (`~/.local/state/nvim/undo/`).
 
+set shortmess+=A            " Don't warn when an existing swap file is found.
+
 " Remove trailing whitespace and multiple newlines.
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd BufWritePre * %s/\n\+\%$//e
