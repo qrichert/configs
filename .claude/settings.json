@@ -8,7 +8,7 @@
     "command": "bash ~/.claude/statusline-command.sh"
   },
   "outputStyle": "Explanatory",
-  "effortLevel": "high",
+  "effortLevel": "max",
   "skipDangerousModePermissionPrompt": true,
   "enabledPlugins": {
     "rust-analyzer-lsp@claude-plugins-official": true
