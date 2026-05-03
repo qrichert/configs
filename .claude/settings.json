@@ -1,17 +1,18 @@
 {
-  "model": "opus",
-  "effortLevel": "max",
-  "outputStyle": "Explanatory",
   "permissions": {
     "defaultMode": "plan"
   },
-  "showClearContextOnPlanAccept": true,
-  "skipDangerousModePermissionPrompt": true,
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "rust-analyzer-lsp@claude-plugins-official": true
-  }
+  },
+  "outputStyle": "Explanatory",
+  "effortLevel": "high",
+  "showClearContextOnPlanAccept": true,
+  "skipDangerousModePermissionPrompt": true,
+  "editorMode": "vim"
 }
