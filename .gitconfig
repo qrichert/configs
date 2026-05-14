@@ -43,6 +43,7 @@
 	hdf = diff HEAD
 	sdf = diff --stat HEAD
 	cdf = diff --cached
+	wsdf = diff --ignore-space-change
 	wdf = diff --color-words
 	chdf = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
 	bindiff = diff --text
