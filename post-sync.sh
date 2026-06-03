@@ -14,10 +14,12 @@ if [[ -f ~/.deezfish.fish ]]; then
     cat ~/.deezfish.fish >> ~/.config/fish/config.fish
 fi
 
-# Trim Neovim config on low-powered machines.
+# Trim Neovim config on low-powered machines, or when forced via
+# `DEEZ_NVIM_MINIMAL` (e.g. servers, where plugins are an unwanted
+# attack surface).
 nb_cpu_cores=$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 0)
-if (( $nb_cpu_cores < 2 )); then
-    [[ -n $DEEZ_VERBOSE ]] && echo "Low-powered machine: trimming Neovim \`init.lua\` to minimal config."
+if (( $nb_cpu_cores < 2 )) || [[ -n $DEEZ_NVIM_MINIMAL ]]; then
+    [[ -n $DEEZ_VERBOSE ]] && echo "Trimming Neovim \`init.lua\` to minimal config."
     sed '/-- END OF MINIMAL CONFIG --/q' ~/.config/nvim/init.lua > /tmp/init.lua
     mv /tmp/init.lua ~/.config/nvim/init.lua
 fi
