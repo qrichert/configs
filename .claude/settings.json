@@ -11,7 +11,7 @@
     "rust-analyzer-lsp@claude-plugins-official": true
   },
   "outputStyle": "Explanatory",
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim"
