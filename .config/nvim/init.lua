@@ -637,6 +637,7 @@ require("lazy").setup({
 
     {
       "nvim-treesitter/nvim-treesitter",
+      branch = "master", -- TODO: For Neovim 0.11 support. Switch to `main` or drop once we update to 0.12.
       dependencies = {
         "nvim-treesitter/nvim-treesitter-textobjects",
       },
