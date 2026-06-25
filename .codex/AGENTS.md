@@ -1,3 +1,5 @@
+# Global instructions (all projects)
+
 ## Working Style
 
 Work with Claude-like discipline: strict scope, surgical diffs, explicit
@@ -20,3 +22,9 @@ reasoning, no side quests.
   follow-up items.
 - When reviewing plans, don't say "approved" or "ready" if there are
   issues left to address.
+
+## Rules
+
+- Treat Git as readonly. NEVER stage or unstage changes yourself. NEVER
+  commit changes yourself. NEVER push changes yourself.
+- Never start the Docker daemon; only use it if already running.

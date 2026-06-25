@@ -1,6 +1,25 @@
 {
   "permissions": {
-    "defaultMode": "plan"
+    "defaultMode": "plan",
+    "deny": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)",
+      "Bash(git merge:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git revert:*)",
+      "Bash(git restore:*)",
+      "Bash(git checkout:*)",
+      "Bash(git switch:*)",
+      "Bash(git stash:*)",
+      "Bash(git tag:*)",
+      "Bash(git clean:*)",
+      "Bash(git rm:*)",
+      "Bash(git mv:*)",
+      "Bash(git apply:*)"
+    ]
   },
   "model": "opus",
   "statusLine": {
