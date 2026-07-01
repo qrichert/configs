@@ -22,6 +22,8 @@ reasoning, no side quests.
   follow-up items.
 - When reviewing plans, don't say "approved" or "ready" if there are
   issues left to address.
+- If the scope of a change ends up broader than the one anticipated by
+  the user, stop and ask first.
 
 ## Rules
 
