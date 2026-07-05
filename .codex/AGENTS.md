@@ -30,6 +30,8 @@ reasoning, no side quests.
 - Treat Git as readonly. NEVER stage or unstage changes yourself. NEVER
   commit changes yourself. NEVER push changes yourself.
 - Never start the Docker daemon; only use it if already running.
+- Use the project's package manager to manipulate dependencies. NEVER
+  change dependencies manually.
 
 ## Fine-tuning
 
