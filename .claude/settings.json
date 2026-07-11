@@ -1,4 +1,11 @@
 {
+  "model": "opus",
+  "effortLevel": "xhigh",
+  "outputStyle": "Explanatory",
+  "editorMode": "vim",
+  "includeCoAuthoredBy": false,
+  "showClearContextOnPlanAccept": true,
+  "skipDangerousModePermissionPrompt": true,
   "permissions": {
     "defaultMode": "plan",
     "deny": [
@@ -21,17 +28,11 @@
       "Bash(git apply:*)"
     ]
   },
-  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "rust-analyzer-lsp@claude-plugins-official": true
-  },
-  "outputStyle": "Explanatory",
-  "effortLevel": "xhigh",
-  "showClearContextOnPlanAccept": true,
-  "skipDangerousModePermissionPrompt": true,
-  "editorMode": "vim"
+  }
 }
