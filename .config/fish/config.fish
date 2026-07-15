@@ -29,7 +29,7 @@ alias git="LANG=en_US.UTF-8 $(which git)"
 alias gti="git"
 alias pra="prek run --all-files"
 alias pr=":"
-alias prettier="npx prettier --write --prose-wrap=always --print-width=72"
+alias prettier="npx prettier@latest --write --prose-wrap=always --print-width=72"
 alias claude="claude --allow-dangerously-skip-permissions"
 
 export EDITOR=nvim
