@@ -63,11 +63,11 @@ local function smart_format()
     or filetype == "json"
   then
     label = "prettier"
-    cmds = { { "prettier", "--write", "--prose-wrap=always", "--print-width=72", filepath } }
+    cmds = { { "bunx", "--bun", "prettier@latest", "--write", "--prose-wrap=always", "--print-width=72", filepath } }
   elseif filetype == "markdown" then
     label = "prettier + normalize-punctuation"
     cmds = {
-      { "prettier", "--write", "--prose-wrap=always", "--print-width=72", filepath },
+      { "bunx", "--bun", "prettier@latest", "--write", "--prose-wrap=always", "--print-width=72", filepath },
       { "normalize-punctuation", filepath },
     }
   elseif filetype == "lua" then
