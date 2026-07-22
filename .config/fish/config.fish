@@ -38,6 +38,10 @@ export LESS="-R -F -X"
 export PRE_COMMIT_ALLOW_NO_CONFIG=1
 export CRONRUNNER_ENV="$HOME/.cron.env"
 
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
+
 function localip
     switch (uname)
         case Darwin # macOS
