@@ -16,7 +16,17 @@ if status is-interactive
 end
 
 if command -v eza > /dev/null
-    alias ls="eza"
+    function ls --wraps=eza
+        set -l eza_args
+        for arg in $argv
+            if test "$arg" = "-rtl"
+                set --append eza_args -l --sort=modified
+            else
+                set --append eza_args "$arg"
+            end
+        end
+        command eza $eza_args
+    end
 end
 
 if command -v bat > /dev/null
