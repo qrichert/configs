@@ -8,6 +8,15 @@
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
 
+## Writing
+
+- Write every doc, comment, commit message, and explanation tight: lead
+  with the crux as a causal chain (A, so B, which is why C), plain
+  words, no scaffolding. The failure mode is treating anything labeled
+  "documentation" as license for sections, tables, hedges, and padding
+  to feel complete — it buries the point. Terse is the default, not
+  extra effort.
+
 ## Fine-tuning
 
 - `except A, B:` (the comma form without parentheses, no `as`) is valid
