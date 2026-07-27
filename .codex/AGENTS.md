@@ -24,6 +24,10 @@ reasoning, no side quests.
   issues left to address.
 - If the scope of a change ends up broader than the one anticipated by
   the user, stop and ask first.
+- Questions, objections, and corrections are not authorization. Never
+  implement, revert, or discard work unless the user explicitly requests
+  that action. If the product decision becomes ambiguous, preserve the
+  current state and ask.
 
 ## Rules
 
