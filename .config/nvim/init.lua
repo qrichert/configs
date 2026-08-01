@@ -1035,10 +1035,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
     -- Inlay type and parameter hints.
-    vim.lsp.inlay_hint.enable(false) -- Disabled by default, they're noisy.
+    vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf }) -- Disabled by default, they're noisy.
     vim.keymap.set("n", "<Leader>h", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-    end)
+      local filter = { bufnr = ev.buf }
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
+    end, opts)
   end,
 })
 
