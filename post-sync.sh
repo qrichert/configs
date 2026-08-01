@@ -25,6 +25,7 @@ if (( $nb_cpu_cores < 2 )) || [[ -n $DEEZ_NVIM_MINIMAL ]]; then
 fi
 
 # Alias SSH terminfo for Ghostty.
+mkdir -p -m 700 ~/.ssh
 if ! grep -qF "SetEnv TERM=xterm-256color" ~/.ssh/config; then
     [[ -n $DEEZ_VERBOSE ]] && echo "Alias SSH terminfo for Ghostty."
     echo "" >> ~/.ssh/config
