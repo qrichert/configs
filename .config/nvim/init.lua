@@ -479,12 +479,18 @@ require("lazy").setup({
 
         vim.keymap.set("n", "-", "<Cmd>Oil<CR>", { desc = "Open parent directory" })
         vim.keymap.set("n", "<Leader><Tab>", function()
-          -- Look for an existing Oil buffer in a vertical split.
-          for _, win in ipairs(vim.api.nvim_list_wins()) do
+          -- Look for the dedicated Oil side window in the current tab.
+          local tab_wins = vim.api.nvim_tabpage_list_wins(0)
+          for _, win in ipairs(tab_wins) do
             local buf = vim.api.nvim_win_get_buf(win)
             local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
-            if ft == "oil" then
-              vim.api.nvim_win_close(win, true)
+            if ft == "oil" and vim.w[win].oil_side_window then
+              if #tab_wins == 1 then
+                vim.api.nvim_set_current_win(win)
+                oil.close()
+              else
+                vim.api.nvim_win_close(win, true)
+              end
               return
             end
           end
@@ -493,6 +499,7 @@ require("lazy").setup({
           -- Adjust width as needed.
           vim.cmd("topleft vsplit | vertical resize 30")
           oil.open()
+          vim.w.oil_side_window = true
         end, { desc = "Toggle Oil file explorer" })
       end,
     },
