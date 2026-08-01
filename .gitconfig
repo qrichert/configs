@@ -55,6 +55,7 @@
 	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
 	llfp = log --oneline --graph --first-parent
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
+	f = fetch --all
 	p = push
 	pf = push --force
 	m = merge
