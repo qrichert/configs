@@ -73,6 +73,9 @@ nnoremap <C-k> <Cmd>cprevious<CR>
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 
+" Open netrw unless a plugin has already mapped `-`.
+autocmd VimEnter * if exists(':Explore') && empty(maparg('-', 'n')) | nnoremap - <Cmd>Explore<CR>| endif
+
 " Force the use of `hjkl`.
 noremap <Left> <Nop>
 noremap <Down> <Nop>
