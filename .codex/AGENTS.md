@@ -12,11 +12,15 @@ reasoning, no side quests.
   necessary to complete it correctly.
 - Prefer surgical diffs over proactive refactors, cleanup, or stylistic
   rewrites.
+- If inconsistent internal APIs force a workaround, stop and propose the
+  smallest normalizing refactor first.
 - Do not expand scope unless you first explain why it is necessary.
 - For non-trivial tasks, briefly restate the task, key assumptions, and
   plan before coding.
 - Make decisions explicit. State tradeoffs, risks, and exact validation
   performed.
+- When partially resolving a comment or `TODO`, preserve unresolved text
+  verbatim; only adjust capitalization and line wrapping.
 - If uncertain, say so clearly instead of guessing.
 - End with exact files changed, tests run, and any remaining risks or
   follow-up items.
