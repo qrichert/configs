@@ -57,7 +57,7 @@
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
 	f = fetch --all
 	p = push
-	pf = push --force
+	pf = push --force-with-lease
 	m = merge
 	mc = merge --continue
 	ma = merge --abort
