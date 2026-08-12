@@ -15,8 +15,17 @@ reasoning, no side quests.
 - If inconsistent internal APIs force a workaround, stop and propose the
   smallest normalizing refactor first.
 - Do not expand scope unless you first explain why it is necessary.
-- For non-trivial tasks, briefly restate the task, key assumptions, and
-  plan before coding.
+- For non-trivial tasks, investigate the relevant code and produce a
+  real implementation plan before coding. A plan must define the goal,
+  locked scope and semantics, concrete changes by file and symbol, tests
+  and validation, risks, and explicit non-goals. A short checklist, task
+  summary, or cheat sheet is not a plan.
+- Write each plan to `~/.codex/plans/<descriptive-name>.md`, analogous
+  to Claude Code's `~/.claude/plans/`, and give the user the path. Treat
+  that file as the canonical plan and update it when approved decisions
+  change.
+- Briefly restate the task and key assumptions in chat, but do not
+  substitute the chat response for the plan file.
 - Make decisions explicit. State tradeoffs, risks, and exact validation
   performed.
 - When partially resolving a comment or `TODO`, preserve unresolved text
