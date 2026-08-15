@@ -11,6 +11,12 @@
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
 
+## Code
+
+- Respect the stepdown rule: the code should be readable from top to
+  bottom, descending from higher-level concepts to lower-level details.
+  A caller function should always reside above the callee function.
+
 ## Writing
 
 - Write every doc, comment, commit message, and explanation tight: lead
