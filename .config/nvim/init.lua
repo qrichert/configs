@@ -357,6 +357,9 @@ require("lazy").setup({
             map("n", "<Leader>gR", gitsigns.reset_buffer)
             map("n", "<Leader>gN", gitsigns.prev_hunk)
             map("n", "<Leader>gn", gitsigns.next_hunk)
+            map("n", "<Leader>gC", function()
+              gitsigns.setqflist("all")
+            end)
 
             -- Blame.
             map("n", "<Leader>gl", gitsigns.toggle_current_line_blame)
