@@ -437,6 +437,16 @@ require("lazy").setup({
       end,
     },
 
+    {
+      "qrichert/git-slides",
+      event = "VeryLazy",
+      config = function(plugin)
+        vim.opt.rtp:append(plugin.dir .. "/plugins/nvim")
+        require("lazy.core.loader").packadd(plugin.dir .. "/plugins/nvim")
+        pcall(vim.cmd, "helptags " .. vim.fn.fnameescape(plugin.dir .. "/plugins/nvim/doc"))
+      end,
+    },
+
     -- Restore last session's open files for the current directory.
     --
     -- Commands:
