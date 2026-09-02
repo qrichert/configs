@@ -3,7 +3,11 @@
   "effortLevel": "xhigh",
   "outputStyle": "Explanatory",
   "editorMode": "vim",
-  "includeCoAuthoredBy": false,
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
   "permissions": {
