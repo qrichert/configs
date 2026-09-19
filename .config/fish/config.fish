@@ -41,6 +41,8 @@ alias pra="prek run --all-files"
 alias pr=":"
 alias prettier="npx prettier@latest --write --prose-wrap=always --print-width=72"
 alias claude="claude --allow-dangerously-skip-permissions"
+# https://github.com/openai/codex/issues/14601#issuecomment-5719648876
+alias codex="codex --profile=local"
 
 export EDITOR=nvim
 export LESSCHARSET="UTF-8"
