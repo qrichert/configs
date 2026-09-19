@@ -665,152 +665,143 @@ require("lazy").setup({
 
     {
       "nvim-treesitter/nvim-treesitter",
-      branch = "master", -- TODO: For Neovim 0.11 support. Switch to `main` or drop once we update to 0.12.
-      dependencies = {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-      },
+      branch = "main",
+      lazy = false,
       build = ":TSUpdate",
       config = function()
-        require("nvim-treesitter.configs").setup({
-          -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-          ensure_installed = {
-            "bash",
-            "c",
-            "caddy",
-            "cpp",
-            "css",
-            "csv",
-            "dockerfile",
-            "editorconfig",
-            "fish",
-            "git_config",
-            "git_rebase",
-            "gitattributes",
-            "gitcommit",
-            "gitignore",
-            "html",
-            "javadoc",
-            "javascript",
-            "json",
-            -- "latex", -- Requires Treesitter CLI.
-            "lua",
-            "luadoc",
-            "make",
-            "markdown",
-            "markdown_inline",
-            "mermaid",
-            "nginx",
-            "po",
-            "python",
-            "query",
-            "regex",
-            "rust",
-            "sql",
-            "ssh_config",
-            "terraform",
-            "toml",
-            "tsx",
-            "typescript",
-            "vim",
-            "vimdoc",
-            "xml",
-            "yaml",
-          },
+        local treesitter = require("nvim-treesitter")
+        -- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+        -- Default: ~/.local/share/nvim/site/parser/
+        treesitter.setup({})
+        -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+        -- NOTE: these are the names of the parsers and not the filetype.
+        treesitter.install({
+          "bash",
+          "c",
+          "caddy",
+          "cpp",
+          "css",
+          "csv",
+          "dockerfile",
+          "editorconfig",
+          "fish",
+          "git_config",
+          "git_rebase",
+          "gitattributes",
+          "gitcommit",
+          "gitignore",
+          "html",
+          "javadoc",
+          "javascript",
+          "json",
+          -- "latex", -- Requires Treesitter CLI.
+          "lua",
+          "luadoc",
+          "make",
+          "markdown",
+          "markdown_inline",
+          "mermaid",
+          "nginx",
+          "po",
+          "python",
+          "query",
+          "regex",
+          "rust",
+          "sql",
+          "ssh_config",
+          "terraform",
+          "toml",
+          "tsx",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "xml",
+          "yaml",
+        })
 
-          -- Install parsers synchronously (only applied to `ensure_installed`)
-          sync_install = false,
+        -- Do not use virtual text to highlight the end of a block.
+        vim.g.matchup_treesitter_disable_virtual_text = true
+        vim.api.nvim_create_autocmd("FileType", {
+          callback = function(ev)
+            -- Disable slow treesitter highlight for large files.
+            local stats = vim.uv.fs_stat(vim.api.nvim_buf_get_name(ev.buf))
+            if stats and stats.size > 512 * 1024 then
+              vim.schedule(function()
+                vim.notify("Treesitter disabled for large file: " .. stats.size .. " bytes", vim.log.levels.WARN)
+              end)
+              return
+            end
 
-          -- Automatically install missing parsers when entering buffer
-          -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-          auto_install = false,
+            local lang = vim.treesitter.language.get_lang(vim.bo[ev.buf].filetype)
+            if lang and vim.treesitter.language.add(lang) then
+              -- Using `:h syntax` and tree-sitter at the same time may slow down your editor,
+              -- and you may see some duplicate highlights.
+              vim.treesitter.start(ev.buf, lang)
+            end
+          end,
+        })
+      end,
+    },
 
-          -- List of parsers to ignore installing (or "all")
-          -- ignore_install = { "javascript" },
+    {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      branch = "main",
+      lazy = false,
+      dependencies = { "nvim-treesitter/nvim-treesitter" },
+      config = function()
+        require("nvim-treesitter-textobjects").setup({
+          select = {
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
 
-          -- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-          -- Default: ~/.local/share/nvim/site/parser/
-          -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-          highlight = {
-            enable = true,
-
-            -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-            -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-            -- the name of the parser)
-            -- list of language that will be disabled
-
-            -- disable = { "c", "rust" },
-
-            -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-            disable = function(lang, buf)
-              local max_filesize = 512 * 1024 -- 512 KB
-              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-              if ok and stats and stats.size > max_filesize then
-                vim.schedule(function()
-                  vim.notify("Treesitter disabled for large file: " .. stats.size .. " bytes", vim.log.levels.WARN)
-                end)
-                return true
-              end
-            end,
-
-            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-            -- Using this option may slow down your editor, and you may see some duplicate highlights.
-            -- Instead of true it can also be a list of languages
-            additional_vim_regex_highlighting = false,
-          },
-
-          matchup = {
-            -- Required for `vim-matchup` to work with Treesitter.
-            enable = true,
-            -- Do not use virtual text to highlight the end of a block.
-            disable_virtual_text = true,
-          },
-
-          textobjects = {
-            select = {
-              enable = true,
-
-              -- Automatically jump forward to textobj, similar to targets.vim
-              lookahead = true,
-
-              keymaps = {
-                -- You can use the capture groups defined in textobjects.scm
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-                -- You can optionally set descriptions to the mappings (used in the desc parameter of
-                -- nvim_buf_set_keymap) which plugins like which-key display
-                -- ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-                -- You can also use captures from other query groups like `locals.scm`
-                ["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
-              },
-              -- You can choose the select mode (default is charwise 'v')
-              --
-              -- Can also be a function which gets passed a table with the keys
-              -- * query_string: eg '@function.inner'
-              -- * method: eg 'v' or 'o'
-              -- and should return the mode ('v', 'V', or '<c-v>') or a table
-              -- mapping query_strings to modes.
-              -- selection_modes = {
-              --   ['@parameter.outer'] = 'v', -- charwise
-              --   ['@function.outer'] = 'V', -- linewise
-              --   ['@class.outer'] = '<c-v>', -- blockwise
-              -- },
-              -- If you set this to `true` (default is `false`) then any textobject is
-              -- extended to include preceding or succeeding whitespace. Succeeding
-              -- whitespace has priority in order to act similarly to eg the built-in
-              -- `ap`.
-              --
-              -- Can also be a function which gets passed a table with the keys
-              -- * query_string: eg '@function.inner'
-              -- * selection_mode: eg 'v'
-              -- and should return true or false
-              include_surrounding_whitespace = false,
-            },
+            -- You can choose the select mode (default is charwise 'v')
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * method: eg 'v' or 'o'
+            -- and should return the mode ('v', 'V', or '<c-v>') or a table
+            -- mapping query_strings to modes.
+            -- selection_modes = {
+            --   ['@parameter.outer'] = 'v', -- charwise
+            --   ['@function.outer'] = 'V', -- linewise
+            --   ['@class.outer'] = '<c-v>', -- blockwise
+            -- },
+            -- If you set this to `true` (default is `false`) then any textobject is
+            -- extended to include preceding or succeeding whitespace. Succeeding
+            -- whitespace has priority in order to act similarly to eg the built-in
+            -- `ap`.
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * selection_mode: eg 'v'
+            -- and should return true or false
+            include_surrounding_whitespace = false,
           },
         })
+
+        local select = require("nvim-treesitter-textobjects.select")
+        -- You can use the capture groups defined in textobjects.scm
+        -- `af` selects the whole function; `if` selects its inner part.
+        vim.keymap.set({ "x", "o" }, "af", function()
+          select.select_textobject("@function.outer", "textobjects")
+        end)
+        vim.keymap.set({ "x", "o" }, "if", function()
+          select.select_textobject("@function.inner", "textobjects")
+        end)
+        -- `ac` selects the whole class; `ic` selects its inner part.
+        vim.keymap.set({ "x", "o" }, "ac", function()
+          select.select_textobject("@class.outer", "textobjects")
+        end)
+        vim.keymap.set({ "x", "o" }, "ic", function()
+          select.select_textobject("@class.inner", "textobjects")
+        end)
+        -- You can optionally set descriptions to the mappings (used in the desc parameter of
+        -- nvim_buf_set_keymap) which plugins like which-key display
+        -- You can also use captures from other query groups like `locals.scm`
+        -- `as` selects a language scope.
+        vim.keymap.set({ "x", "o" }, "as", function()
+          select.select_textobject("@local.scope", "locals")
+        end, { desc = "Select language scope" })
       end,
     },
 
