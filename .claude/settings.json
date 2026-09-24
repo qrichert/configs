@@ -39,5 +39,6 @@
   "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "autoContinueAtUsageLimit": true
 }
