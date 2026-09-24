@@ -830,7 +830,7 @@ require("lazy").setup({
           "rust_analyzer",
           "tailwindcss",
           "terraformls",
-          "ts_ls",
+          "tsc",
           -- Better than pyright, but jedi still wins with Django.
           -- Having both enabled is a pain, duplicated info and makes
           -- go-to-definition annoying by opening quickfix with
