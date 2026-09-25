@@ -31,3 +31,16 @@ if ! grep -qF "SetEnv TERM=xterm-256color" ~/.ssh/config; then
     echo "" >> ~/.ssh/config
     cat ./.config/ghostty/ssh.txt >> ~/.ssh/config
 fi
+
+# Share agent skills with Claude.
+mkdir -p ~/.claude/skills
+for skill_directory in ./.agents/skills/*; do
+    [[ -d $skill_directory ]] || continue
+    skill_directory="$PWD/${skill_directory#./}"
+
+    skill_link=~/.claude/skills/${skill_directory##*/}
+    [[ -e $skill_link && ! -L $skill_link ]] && continue
+
+    [[ -n $DEEZ_VERBOSE ]] && echo "Share agent skill with Claude: ${skill_directory##*/}."
+    ln -sf "$skill_directory" "$skill_link"
+done
