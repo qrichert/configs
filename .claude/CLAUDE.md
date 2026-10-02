@@ -11,6 +11,18 @@
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
 
+## Planning
+
+- Plan mode does not suspend judgment. Treat every review finding,
+  suggestion, and "optional" idea as a claim to verify, not an
+  instruction to apply: check it against the code, trace its knock-on
+  effects (new states, races, lifecycle and ownership changes), and push
+  back when it is wrong or not worth its cost. Accepting feedback to
+  reach approval faster is a failure; a plan that passes review but is
+  wrong is worse than another round of pushback.
+- When revising a plan after review, state which points you accept,
+  which you reject, and why. Never silently fold a suggestion in.
+
 ## Code
 
 - Respect the stepdown rule: the code should be readable from top to
