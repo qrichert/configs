@@ -42,5 +42,5 @@ for skill_directory in ./.agents/skills/*; do
     [[ -e $skill_link && ! -L $skill_link ]] && continue
 
     [[ -n $DEEZ_VERBOSE ]] && echo "Share agent skill with Claude: ${skill_directory##*/}."
-    ln -sf "$skill_directory" "$skill_link"
+    ln -sfn "$skill_directory" "$skill_link"
 done
