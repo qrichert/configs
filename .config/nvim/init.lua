@@ -62,18 +62,28 @@ local function smart_format()
     or filetype == "yaml"
     or filetype == "json"
   then
-    label = "prettier"
-    cmds = { { "bunx", "--bun", "prettier@latest", "--write", "--prose-wrap=always", "--print-width=72", filepath } }
-  elseif filetype == "markdown" then
-    label = "prettier + normalize-punctuation"
+    label = "oxfmt"
     cmds = {
       {
         "bunx",
         "--bun",
-        "prettier@latest",
+        "oxfmt@latest",
         "--write",
-        "--prose-wrap=always",
-        "--print-width=72",
+        "--config",
+        vim.fs.joinpath(vim.fn.stdpath("config"), "oxfmt.json"),
+        filepath,
+      },
+    }
+  elseif filetype == "markdown" then
+    label = "oxfmt + normalize-punctuation"
+    cmds = {
+      {
+        "bunx",
+        "--bun",
+        "oxfmt@latest",
+        "--write",
+        "--config",
+        vim.fs.joinpath(vim.fn.stdpath("config"), "oxfmt.json"),
         filepath,
       },
       { "normalize-punctuation", filepath },
