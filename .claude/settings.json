@@ -26,6 +26,12 @@
     ],
     "defaultMode": "plan"
   },
+  "model": "opus",
+  "deniedMcpServers": [
+    {
+      "serverName": "claude.ai Gmail"
+    }
+  ],
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -39,6 +45,5 @@
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
-  "autoContinueAtUsageLimit": true,
-  "model": "opus"
+  "autoContinueAtUsageLimit": true
 }
