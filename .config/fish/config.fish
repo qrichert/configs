@@ -70,3 +70,7 @@ function history
 end
 
 fish_add_path "$HOME/.local/bin"
+
+if test -f "$HOME/.local.fish"
+    source "$HOME/.local.fish"
+end
