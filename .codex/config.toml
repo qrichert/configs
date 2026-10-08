@@ -8,6 +8,7 @@ sandbox_mode = "danger-full-access"
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used", "five-hour-limit", "thread-title"]
 terminal_title = ["spinner", "project", "thread"]
+vim_mode_default = true
 
 [notice]
 hide_rate_limit_model_nudge = true
