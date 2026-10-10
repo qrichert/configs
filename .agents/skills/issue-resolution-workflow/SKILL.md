@@ -23,6 +23,9 @@ decisions to the planning model. The implementer must not serve as its
 own independent reviewer. Choose models by task difficulty and available
 capabilities rather than hard-coded model names.
 
+Invoking this workflow authorizes delegation: spawn subagents for the roles
+above whenever the platform supports them, without asking first.
+
 ## Investigate the Issue
 
 1. Identify the repository and issue from the request. If either is ambiguous,
@@ -44,8 +47,10 @@ that external mutation.
 
 ## Plan the Resolution
 
-Write a canonical plan at `~/.codex/plans/issue-<id>-<descriptive-slug>.md`.
-For a tracker without a numeric ID, use its stable issue key. Include:
+Write a canonical plan named `issue-<id>-<descriptive-slug>.md` in the
+agent's default plan directory if it has one (e.g., `~/.claude/plans/`), or in
+`~/.<agent>/plans/` otherwise (e.g., `~/.codex/plans/`). For a tracker without
+a numeric ID, use its stable issue key. Include:
 
 - Goal, acceptance criteria, and the evidence from the issue and current code.
 - Locked scope, intended behavior, invariant owner, and meaningful tradeoffs.
@@ -57,7 +62,7 @@ For a tracker without a numeric ID, use its stable issue key. Include:
 
 Make ordinary implementation choices in the plan. Ask for an earlier product or
 architecture decision only when it cannot be inferred safely. For a substantive
-plan, use an independent reviewer when delegation is available and authorized.
+plan, use an independent reviewer when delegation is available.
 Have the reviewer read the issue, applicable instructions, and current code
 before the plan, then assess correctness, scope, design, migration, and
 validation. Resolve actionable findings and update the plan. Do not treat the
@@ -67,6 +72,28 @@ Explain the proposed resolution in plain language, give the plan path, and wait
 for explicit approval before implementing. A question, correction, or objection
 is not implementation approval. Update the canonical plan when an approved
 decision changes.
+
+## Triage Review Findings
+
+Apply this to every review, of the plan or of the diff, before changing
+anything. A finding is a claim to weigh, not an instruction.
+
+Classify each finding and write its class in the response:
+
+- **New:** the decision it touches was never considered. Assess it on
+  its merits.
+- **Already decided:** it contradicts a decision recorded in the plan or
+  its review log. Name that decision, then state what is new: a
+  scenario, impact, or fact the decision did not consider. Restating the
+  risk more forcefully, or reproducing a case the decision already
+  accepted, is not new. With nothing new, decline and cite the recorded
+  reasoning.
+- **Contradicts the maintainer:** escalate it to the maintainer; never
+  silently accept or reject it.
+
+Conceding is never the default. If the "what is new" line cannot be
+filled in, the finding is declined. Record every decline and its reason
+in the plan's review log.
 
 ## Implement and Validate
 
@@ -87,18 +114,24 @@ gate.
 
 Review the uncommitted diff against the issue, current code, and approved plan.
 For a substantive change, use an independent reviewer when delegation is
-available and authorized. Have that reviewer inspect the issue discussion,
+available. Have that reviewer inspect the issue discussion,
 applicable instructions, diff, and surrounding code before reading the plan.
 Prioritize bugs, regressions, invariant violations, missing tests, scope drift,
 and misleading documentation. Fix valid findings and rerun relevant validation.
 Record concrete reasons for declined findings in the plan. A plan cannot by
 itself justify a user-visible failure or weakened invariant.
 
+As the final step before every hand-off, run `just lint` from the
+repository root and report its result. It is the only accepted lint gate:
+module-level or hand-picked lint commands are partial and never replace it,
+since the root recipe also runs cross-cutting checks such as schema parity and
+root-file formatting.
+
 Hand off the outcome, important decisions, exact files changed, validation
-commands and results, remaining risks, and a suggested commit message if
-useful. Leave staging and committing to the maintainer. Close or update the
-issue only when its completion criteria are met and the user has authorized
-that tracker change.
+commands and results, remaining risks, and a suggested commit message. Leave
+staging and committing to the maintainer. Close or update the issue only when
+its completion criteria are met and the user has authorized that tracker
+change.
 
 ## Multiple Issues
 
