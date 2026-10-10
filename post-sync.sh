@@ -37,7 +37,7 @@ fi
 mkdir -p ~/.claude/skills
 for skill_directory in ./.agents/skills/*; do
     [[ -d $skill_directory ]] || continue
-    skill_directory="$PWD/${skill_directory#./}"
+    skill_directory=~/.agents/skills/${skill_directory##*/}
 
     skill_link=~/.claude/skills/${skill_directory##*/}
     [[ -e $skill_link && ! -L $skill_link ]] && continue
