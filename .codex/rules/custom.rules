@@ -29,6 +29,7 @@ prefix_rule(
             "add",
             "reset",
             "rebase",
+            "history",
             "merge",
             "cherry-pick",
             "revert",

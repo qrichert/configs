@@ -11,6 +11,7 @@
       "Bash(git add:*)",
       "Bash(git reset:*)",
       "Bash(git rebase:*)",
+      "Bash(git history:*)",
       "Bash(git merge:*)",
       "Bash(git cherry-pick:*)",
       "Bash(git revert:*)",
