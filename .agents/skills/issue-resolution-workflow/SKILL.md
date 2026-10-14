@@ -117,9 +117,14 @@ For a substantive change, use an independent reviewer when delegation is
 available. Have that reviewer inspect the issue discussion,
 applicable instructions, diff, and surrounding code before reading the plan.
 Prioritize bugs, regressions, invariant violations, missing tests, scope drift,
-and misleading documentation. Fix valid findings and rerun relevant validation.
-Record concrete reasons for declined findings in the plan. A plan cannot by
-itself justify a user-visible failure or weakened invariant.
+and misleading documentation. After fixing a finding, review that fix narrowly
+and rerun relevant validation. Repeat this focused loop for any new findings.
+Then review the complete final changeset against its base, including all earlier
+commits and review fixes. If the full review finds an actionable issue, fix it,
+review the fix narrowly, and repeat the full review. Hand off only after a full
+review has no actionable findings. Record concrete reasons for declined findings
+in the plan. A plan cannot by itself justify a user-visible failure or weakened
+invariant.
 
 As the final step before every hand-off, run `just lint` from the
 repository root and report its result. It is the only accepted lint gate:
