@@ -59,6 +59,14 @@ reasoning, no side quests.
   bottom, descending from higher-level concepts to lower-level details.
   A caller function should always reside above the callee function.
 
+## Git
+
+- Always provide full commit message when asked for one (title + body +
+  optional footers), unless specifically asked for just a title.
+- Breaking changes should include a `BREAKING CHANGE:` note.
+- Conventional Commit format. First letter of title capitalized (e.g.,
+  `feat: Foo bar baz`).
+
 ## Fine-tuning
 
 - `except A, B:` (the comma form without parentheses, no `as`) is valid
