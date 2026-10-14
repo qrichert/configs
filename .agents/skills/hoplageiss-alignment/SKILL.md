@@ -200,6 +200,27 @@ porting review. A no-port commit that warrants no Skoscht change is a
 no-op: move to the next upstream commit without a Skoscht commit or an
 `AGENTS.md` edit.
 
+Before finalizing dispositions, scan the titles and labels of Skoscht's
+open issues for plausible matches to the upstream commits. Read the
+complete discussion only for those candidates, then map their acceptance
+criteria to the proposed local port. Record whether the port fully
+resolves, partially addresses, or does not address each candidate. A
+matching title or shared fix is not enough to close an issue: check
+Skoscht-only code and tests against the issue's full scope. Include a
+`Closes: #N` footer only when the resulting Skoscht commit satisfies the
+entire issue; use `Ref: #N` for partial work. If closing the issue
+requires work beyond the intended port, present that scope for the
+maintainer's decision before editing.
+
+Before editing the next port, list **every** intervening commit that
+will be advanced past without a port in the in-chat disposition. Use
+`git log --oneline` format for each entry (`<short hash> <original
+subject>`) and append a brief, commit-specific reason for skipping it.
+Include commits already implemented in Skoscht, intentionally omitted
+commits, and folded fixes. Do not defer this list to the completion
+recap or replace it with a count, a range, or a grouped summary. Keep
+the durable review's fuller classification when it is needed.
+
 Preserve upstream commit granularity for Skoscht changes. For each
 resulting Skoscht alignment commit, hand the maintainer a proposed
 full commit message (subject, body, and applicable footers) that follows
@@ -207,6 +228,10 @@ the upstream message as closely as the actual port allows. If upstream
 has a body, the proposed message must have a body; never hand over only
 its subject. Copy shared wording verbatim, adapting only inaccurate
 product-specific claims and omitting irrelevant issue references.
+Include the complete proposed message in the in-chat handoff for that
+port, before starting another port. A link to a draft file or a subject
+alone does not hand over the message; a durable copy may accompany the
+in-chat text. No message is needed for a no-op commit disposition.
 Explain material scope differences when needed. Include in that same
 proposed commit an update to
 `AGENTS.md`'s latest synchronized Hoplageiss ref, using the full commit
@@ -256,9 +281,32 @@ approval. A request to inspect or review the plan does not authorize
 implementation. If an internal API conflict requires a workaround, stop
 and propose the smallest normalizing refactor first.
 
+## One Port Per Maintainer Review
+
+An approved plan for an alignment range authorizes starting its first
+implementable port, not applying the whole range in one working tree.
+Finish one resulting Skoscht commit at a time. Leave the working tree
+with only that port's changes and its `AGENTS.md` update to the exact
+Hoplageiss commit represented by the port. Run its relevant targeted
+tests and `just lint` from the Skoscht repository root before every
+commit handoff; the root recipe checks backend, docs, web, and schema
+parity. Inspect any formatter changes so the handoff contains only the
+port. Then hand the maintainer the reviewable diff, exact changed
+files, validation results, and complete proposed commit message in
+chat. **Stop there.** Do not edit the next port or advance `AGENTS.md`
+again until the maintainer says the previous port has been handled and
+explicitly asks to continue.
+
+Classify intervening no-op commits and give their individual skip
+reasons before editing the next port; they need no Skoscht commit or
+separate review checkpoint. Saving separate patches for later does not
+replace the one-port working-tree handoff. If the maintainer explicitly
+requests a different batching workflow, follow that instruction.
+
 ## Implement Copy-First
 
-Apply each classified port in upstream commit order. For each port:
+Apply each classified port in upstream commit order, one maintainer
+review cycle at a time. For each port:
 
 1. Copy target files or shared regions verbatim.
 2. Confirm the copied bytes before adaptation.
@@ -294,6 +342,16 @@ Re-diff every content mismatch. Reclassify every one-sided path and
 repeat the target-only test review. Do not limit the second inventory to
 files changed during the port: a new upstream file can reveal an older
 missing counterpart, and edits can disturb shared surroundings.
+
+After implementation, review the Skoscht diff for bugs and gaps caused
+by porting: incorrect adaptations, missed shared changes or tests,
+broken local call sites, integration failures, and unintended edits.
+Use the existing Hoplageiss review as the baseline for copied code;
+do not repeat a broad architecture or design review of unchanged
+upstream behavior. Resolve concrete findings before declaring the port
+complete, and report remaining integration risks and test failures.
+For non-trivial ports, this check complements the independent read-only
+parity audit below.
 
 The completion report must state:
 
