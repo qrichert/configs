@@ -10,6 +10,11 @@
 - Never start the Docker daemon; only use it if already running.
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
+- A question gets an answer, not an edit. When I ask a question,
+  including one that challenges something you did, answer in words:
+  justify it with evidence or admit the mistake. NEVER edit, revert, or
+  "fix" files in response to a question. Only change files on an
+  explicit instruction; if my reply is ambiguous, ask what I mean.
 
 ## Planning
 
