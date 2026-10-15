@@ -10,6 +10,9 @@
 	branch = auto
 	diff = auto
 	status = auto
+; [format]
+; 	We only use it in `show`.
+; 	pretty = fuller
 [diff]
 	colorMoved = default
 [pull]
@@ -54,6 +57,7 @@
 	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
 	llfp = log --oneline --graph --first-parent
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
+	showf = "!git show --format=fuller"
 	f = fetch --all
 	p = push
 	pf = push --force-with-lease
@@ -64,6 +68,7 @@
 	rbc = rebase --continue
 	rba = rebase --abort
 	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
+	fixdates = rebase --rebase-merges --autosquash --committer-date-is-author-date
 	rs = restore
 	rt = reset
 	st = status
@@ -71,7 +76,7 @@
 	pick = cherry-pick
 	pickc = cherry-pick --continue
 	picka = cherry-pick --abort
-	count-lines = "! git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+	count-lines = "!git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
 	changelog = tag -n9999999 --sort=-v:refname
 	# https://stackoverflow.com/questions/8475448/find-merge-commit-which-includes-a-specific-commit
 	find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
