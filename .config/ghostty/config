@@ -13,3 +13,7 @@ window-theme = dark
 macos-titlebar-style = tabs
 
 keybind = global:cmd+m=toggle_quick_terminal
+keybind = global:ctrl+m=toggle_quick_terminal
+
+keybind = ctrl+shift+arrow_up=goto_split:previous
+keybind = ctrl+shift+arrow_down=goto_split:next
