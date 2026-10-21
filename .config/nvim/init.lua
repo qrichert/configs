@@ -189,7 +189,13 @@ require("lazy").setup({
     },
 
     -- Reopen files at last edit position.
-    { "farmergreg/vim-lastplace", lazy = false },
+    {
+      "farmergreg/vim-lastplace",
+      lazy = false,
+      init = function()
+        vim.g.lastplace_open_folds = 0
+      end,
+    },
 
     -- Support for TODO comments.
     {

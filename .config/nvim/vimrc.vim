@@ -103,6 +103,14 @@ nnoremap <Down> <Cmd>tabprevious<CR>
 nnoremap <Leader><Up> <Cmd>tabnew<CR>
 nnoremap <Leader><Down> <Cmd>tabs<CR>
 
+" Restore folds.
+augroup remember_folds
+  autocmd!
+  autocmd BufWinLeave * if &buftype ==# '' | silent! mkview! | endif
+  autocmd BufWinEnter * if &buftype ==# '' | silent! loadview | endif
+  autocmd VimEnter * if &buftype ==# '' | silent! loadview | endif
+augroup END
+
 " Custom commands.
 
 " Join two same-length Markdown table columns. Columns must be separated
