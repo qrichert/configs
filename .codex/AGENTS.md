@@ -10,6 +10,10 @@ reasoning, no side quests.
   request for implementation.
 - Prioritize strict scope discipline. Do what I asked, and only what is
   necessary to complete it correctly.
+- Do not invent constraints or treat implementation preferences as
+  requirements. If an additional constraint appears necessary, explain
+  why it is needed and its impact, and obtain explicit user confirmation
+  before adopting it.
 - Prefer surgical diffs over proactive refactors, cleanup, or stylistic
   rewrites.
 - If inconsistent internal APIs force a workaround, stop and propose the
