@@ -68,8 +68,8 @@ reasoning, no side quests.
 - Always provide full commit message when asked for one (title + body +
   optional footers), unless specifically asked for just a title.
 - Breaking changes should include a `BREAKING CHANGE:` note.
-- Conventional Commit format. First letter of title capitalized (e.g.,
-  `feat: Foo bar baz`).
+- Conventional Commit format. First letter of title capitalized, space
+  after commas in scope (e.g., `feat(backend, frontend): Foo bar baz`).
 
 ## Fine-tuning
 
