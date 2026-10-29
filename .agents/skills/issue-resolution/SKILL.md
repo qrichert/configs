@@ -1,9 +1,9 @@
 ---
-name: issue-resolution-workflow
+name: issue-resolution
 description: Resolve a complex tracked issue through investigation, a reviewed plan, explicit implementation approval, scoped changes, validation, and final diff review. Use when an issue needs coordinated code or architecture work with minimal manual steering.
 ---
 
-# Issue Resolution Workflow
+# Issue Resolution
 
 Resolve one issue at a time. Use the issue and its discussion as the record of
 the requested outcome, then verify their claims against the current code. Keep
