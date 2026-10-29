@@ -36,6 +36,8 @@
 	br = branch
 	# List branches without remote counterpart.
 	brgone = "!LC_ALL=C git fetch --prune && LC_ALL=C git branch -vv | grep \": gone]\" | awk \"{print \\$1}\""
+	# Delete branch and its upstream.
+	brd = "!f() { git branch -D \"$1\" || return; git push origin --delete \"$1\" 2>/dev/null || true; }; f"
 	ci = commit
 	eci = commit --allow-empty
 	c = commit -a --allow-empty-message --no-edit
