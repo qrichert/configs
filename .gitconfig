@@ -25,6 +25,7 @@
 	prompt = false
 [mergetool "nvimdiff"]
 	layout = LOCAL,MERGED,REMOTE
+; TODO: Default starting from Git 2.98 (planned Dec. 2026).
 ; [blame]
 ; 	ignoreRevsFile = .git-blame-ignore-revs
 [url "git@github.com:"]
@@ -33,55 +34,75 @@
 	insteadOf = misc:
 [alias]
 	a = add .
+
 	br = branch
-	# List branches without remote counterpart.
-	brgone = "!LC_ALL=C git fetch --prune && LC_ALL=C git branch -vv | grep \": gone]\" | awk \"{print \\$1}\""
 	# Delete branch and its upstream.
 	brd = "!f() { git branch -D \"$1\" || return; git push origin --delete \"$1\" 2>/dev/null || true; }; f"
+	# List branches without remote counterpart.
+	brgone = "!LC_ALL=C git fetch --prune && LC_ALL=C git branch -vv | grep \": gone]\" | awk \"{print \\$1}\""
+
 	ci = commit
-	eci = commit --allow-empty
+	cie = commit --allow-empty
 	c = commit -a --allow-empty-message --no-edit
+	fx = "!f() { git commit -a --fixup=\"${1:-HEAD}\"; }; f"
+
 	co = checkout
+
 	conf = config --global --edit
+
 	df = diff
-	hdf = diff HEAD
-	sdf = diff --stat HEAD
-	cdf = diff --cached
-	wsdf = diff --ignore-space-change
-	wdf = diff --color-words
-	chdf = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
-	bindiff = diff --text
-	fixup = commit -a --fixup
-	fx = commit -a --fixup HEAD
-	lp = log --patch
+	dfh = diff HEAD
+	dfs = diff --stat HEAD
+	dfc = diff --cached
+	dfb = diff --ignore-space-change
+	dfw = diff --color-words
+	dfch = diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'
+	dfbin = diff --text
+
+	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
 	lg = log --color --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%C(bold red)%d%Creset %s %C(bold green)(%ci) %C(bold blue)<%an>%Creset'
 	ll = log --oneline --graph
-	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
 	llfp = log --oneline --graph --first-parent
 	lme = log --oneline --decorate=auto --author='Quentin Richert'
-	showf = "!git show --format=fuller"
-	f = fetch --all
-	p = push
-	pf = push --force-with-lease
-	m = merge
-	mc = merge --continue
-	ma = merge --abort
-	rb = rebase --committer-date-is-author-date
-	rbc = rebase --continue
-	rba = rebase --abort
-	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
-	fixdates = rebase --rebase-merges --autosquash --committer-date-is-author-date
-	rs = restore
-	rt = reset
-	st = status
-	sw = switch
-	pick = cherry-pick
-	pickc = cherry-pick --continue
-	picka = cherry-pick --abort
-	count-lines = "!git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+	lp = log --patch
+
+	showf = show --format=fuller
+	shows = show --stat
+
 	changelog = tag -n9999999 --sort=-v:refname
 	# https://stackoverflow.com/questions/8475448/find-merge-commit-which-includes-a-specific-commit
 	find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
 	show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
+	count-lines = "!git log --author=\"$1\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+
+	f = fetch --all
+
+	p = push
+	pf = push --force-with-lease
+
+	m = merge
+	ma = merge --abort
+	mc = merge --continue
+
+	rb = "!f() { case \"$1\" in --continue|--abort|--skip|--quit|--edit-todo|--show-current-patch) git rebase \"$@\" ;; *) git rebase --committer-date-is-author-date \"$@\" ;; esac }; f"
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbic = rebase --interactive --rebase-merges --autosquash --committer-date-is-author-date
+	rbfix = rebase --rebase-merges --autosquash --committer-date-is-author-date
+
+	rs = restore
+	rss = restore --staged
+
+	rt = reset
+    rts = reset --soft
+    rth = reset --hard
+
+	st = status
+
+	sw = switch
+
+	pick = cherry-pick
+	picka = cherry-pick --abort
+	pickc = cherry-pick --continue
 [include]
 	path = ~/.gitconfig.local
