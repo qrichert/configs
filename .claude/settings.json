@@ -51,6 +51,7 @@
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "autoContinueAtUsageLimit": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "inputNeededNotifEnabled": true
+  "feedbackDrafts": "off"
 }
