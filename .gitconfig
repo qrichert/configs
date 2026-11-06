@@ -54,7 +54,8 @@
 
 	df = diff
 	dfh = diff HEAD
-	dfs = diff --stat HEAD
+	dfs = diff --stat
+	dfsh = diff --stat HEAD
 	dfc = diff --cached
 	dfb = diff --ignore-space-change
 	dfw = diff --color-words
@@ -62,6 +63,7 @@
 	dfbin = diff --text
 
 	lclean = log --oneline --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold blue)<%an>%Creset'
+	lf = log --format=fuller
 	lg = log --color --graph --abbrev-commit --pretty=format:'%C(yellow)%h%Creset%C(bold red)%d%Creset %s %C(bold green)(%ci) %C(bold blue)<%an>%Creset'
 	ll = log --oneline --graph
 	llfp = log --oneline --graph --first-parent
