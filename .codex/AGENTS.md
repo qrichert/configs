@@ -56,6 +56,8 @@ reasoning, no side quests.
 - Never start the Docker daemon; only use it if already running.
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
+- Create and install user skills in `~/.agents/skills` unless I
+  explicitly request another location.
 
 ## Code
 
