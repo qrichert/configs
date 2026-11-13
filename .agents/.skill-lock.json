@@ -28,6 +28,16 @@
       "pluginName": "example-skills",
       "installedAt": "2026-11-13T21:59:11.888Z",
       "updatedAt": "2026-11-13T21:59:11.888Z"
+    },
+    "mcp-builder": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/mcp-builder/SKILL.md",
+      "skillFolderHash": "ea6e4d7bc108b44b3009129688049e23d801f0f3",
+      "pluginName": "example-skills",
+      "installedAt": "2026-11-13T22:10:22.508Z",
+      "updatedAt": "2026-11-13T22:10:22.508Z"
     }
   },
   "dismissed": {
