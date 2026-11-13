@@ -14,12 +14,17 @@ and test wrappers. A user-requested narrower scope takes precedence.
 1. Inventory manifests, lockfiles, workspaces, update recipes, version
    constraints, overrides, patches, and existing work. Determine which
    packages and projects the request covers before changing them.
-2. Aim for the latest available direct and transitive versions, including
+2. Inventory runtime and package-manager pins across the whole repository,
+   including CI workflows, container base images, manifest
+   `packageManager` fields, and tool version files. Search for every current
+   version before editing, then update the coordinated pin set together or
+   explicitly report why a reference is outside scope.
+3. Aim for the latest available direct and transitive versions, including
    breaking major releases. Audit pins, upper bounds, overrides, and
    patched packages for staleness; do not preserve them merely because
    they were previously necessary. Verify whether upstream absorbed a
    patch before removing it.
-3. If current releases conflict, establish the project's dependency
+4. If current releases conflict, establish the project's dependency
    priority and test the conflict. Prefer its primary product dependency
    over adapters, and adapters over their transitive libraries (for
    example, Django over Django Ninja over Pydantic). Keep an older
@@ -68,5 +73,8 @@ for it. Fix only regressions caused by the upgrade and rerun affected
 checks. Do not treat a passing build as a substitute for tests.
 
 Review the final diff for unrelated edits and unresolved constraints.
+Search the whole repository for superseded runtime and package-manager
+versions, and verify that CI setup, manifests, version files, and container
+images agree on the intended versions.
 Report exact files changed, builds and tests run, any packages left
 below latest with evidence, and validation that could not run.
