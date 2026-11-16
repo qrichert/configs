@@ -8,6 +8,15 @@ vim.loader.enable(true)
 -- Persist extra column before line numbers (for signs).
 vim.opt.signcolumn = "yes:1"
 
+-- Use Neovim highlight groups instead of the host terminal's cursor colors.
+-- The TUI uses each group's background color and ignores its foreground color.
+vim.opt.guicursor = {
+  "n-v-c-sm:block-Cursor",
+  "i-ci-ve:ver25-Cursor",
+  "r-cr-o:hor20-Cursor",
+  "t:block-blinkon500-blinkoff500-TermCursor",
+}
+
 -- Highlight-on-yank.
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -408,12 +417,18 @@ require("lazy").setup({
         scope = { char = "│", highlight = "Whitespace", show_start = false, show_end = false },
       },
       config = function(_, opts)
-        -- Custom colors (see `:highlight`).
-        vim.api.nvim_set_hl(0, "WhitespaceDimmed", { fg = "#333333" })
+        local hooks = require("ibl.hooks")
+        hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+          -- Custom colors (see `:highlight`).
+          if vim.o.background == "light" then
+            vim.api.nvim_set_hl(0, "WhitespaceDimmed", { fg = "#E2E2E2" })
+          else
+            vim.api.nvim_set_hl(0, "WhitespaceDimmed", { fg = "#333333" })
+          end
+        end)
 
         require("ibl").setup(opts)
 
-        local hooks = require("ibl.hooks")
         hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
         hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
       end,
@@ -436,11 +451,31 @@ require("lazy").setup({
       priority = 1000,
       opts = {},
       config = function()
+        local theme_group = vim.api.nvim_create_augroup("ThemeOverrides", { clear = true })
+        vim.api.nvim_create_autocmd("ColorScheme", {
+          group = theme_group,
+          callback = function()
+            if vim.o.background == "light" then
+              -- TUI cursors ignore the foreground color, so keep the block
+              -- distinct from both the light background and the dark glyph.
+              vim.api.nvim_set_hl(0, "Cursor", { fg = "#000000", bg = "#A0A0A0" })
+            else
+              -- Make inlays less intrusive.
+              vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "Gray" })
+            end
+
+            -- Disable LSP semantic highlights (in favor of Treesitter).
+            for _, highlight_group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+              vim.api.nvim_set_hl(0, highlight_group, {})
+            end
+          end,
+        })
+
         -- require("jb").setup({ transparent = true })
         vim.cmd("colorscheme jb")
-
-        -- Make inlays less intrusive.
-        vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "Gray" })
+        vim.keymap.set("n", "<Leader>T", function()
+          vim.o.background = vim.o.background == "dark" and "light" or "dark"
+        end, { desc = "Toggle light/dark theme" })
       end,
     },
 
@@ -1070,8 +1105,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end, opts)
   end,
 })
-
--- Disable all LSP semantic highlights (in favor of Treesitter).
-for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-  vim.api.nvim_set_hl(0, group, {})
-end
