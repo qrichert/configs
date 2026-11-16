@@ -18,7 +18,9 @@ vim.opt.guicursor = {
 }
 
 -- Highlight-on-yank.
+local ui_group = vim.api.nvim_create_augroup("UserInterface", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
+  group = ui_group,
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -26,9 +28,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Normal-looking terminal.
 vim.api.nvim_create_autocmd("TermOpen", {
+  group = ui_group,
   callback = function()
-    vim.opt.number = false
-    vim.opt.relativenumber = false
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
   end,
 })
 
@@ -51,10 +54,42 @@ local function smart_format()
 
   local label
   local cmds
+  local system_opts = { text = true }
 
   if filetype == "rust" then
-    label = "cargo fmt"
-    cmds = { { "cargo", "fmt", "--", filepath } }
+    label = "rustfmt"
+    cmds = { { "rustfmt", "--emit=stdout" } }
+    system_opts.cwd = vim.fs.dirname(filepath)
+    local manifest = vim.fs.find("Cargo.toml", { path = system_opts.cwd, upward = true })[1]
+    if manifest then
+      -- Cargo resolves package editions, including workspace inheritance.
+      local ok, edition = pcall(function()
+        local result = vim
+          .system({
+            "cargo",
+            "metadata",
+            "--no-deps",
+            "--offline",
+            "--format-version",
+            "1",
+            "--manifest-path",
+            manifest,
+          }, { text = true, cwd = system_opts.cwd })
+          :wait()
+        assert(result.code == 0, result.stderr)
+        for _, package in ipairs(vim.json.decode(result.stdout).packages) do
+          if vim.uv.fs_realpath(package.manifest_path) == vim.uv.fs_realpath(manifest) then
+            return package.edition
+          end
+        end
+        error("Cargo metadata did not contain the current package")
+      end)
+      if not ok then
+        vim.notify("rustfmt: cannot determine the package edition: " .. edition, vim.log.levels.ERROR)
+        return
+      end
+      vim.list_extend(cmds[1], { "--edition", edition })
+    end
   elseif filetype == "python" then
     label = "ruff format"
     cmds = {
@@ -107,18 +142,39 @@ local function smart_format()
 
   vim.cmd("write")
 
+  if filetype == "rust" then
+    -- Stdin avoids recursively formatting files declared by `mod`.
+    system_opts.stdin = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n") .. "\n"
+  end
+
+  local errors = {}
   for _, cmd in ipairs(cmds) do
-    local obj = vim.system(cmd, { text = true }):wait()
-    vim.schedule(function()
-      if obj.code == 0 then
-        vim.api.nvim_echo({ { '"' .. label .. '" OK', "Normal" } }, false, {})
-      else
-        vim.notify(obj.stderr, vim.log.levels.ERROR)
-      end
+    local ok, obj = pcall(function()
+      return vim.system(cmd, system_opts):wait()
     end)
+    if not ok then
+      table.insert(errors, cmd[1] .. ": " .. obj)
+    elseif obj.code ~= 0 then
+      local detail = obj.stderr ~= "" and obj.stderr or obj.stdout
+      table.insert(errors, cmd[1] .. " exited with code " .. obj.code .. ": " .. detail)
+    elseif filetype == "rust" then
+      local lines = vim.split(obj.stdout, "\n", { plain = true })
+      if lines[#lines] == "" then
+        table.remove(lines)
+      end
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+      vim.cmd("write")
+    end
   end
 
   vim.cmd("edit")
+  vim.schedule(function()
+    if #errors == 0 then
+      vim.api.nvim_echo({ { '"' .. label .. '" OK', "Normal" } }, false, {})
+    else
+      vim.notify(label .. " failed:\n" .. table.concat(errors, "\n"), vim.log.levels.ERROR)
+    end
+  end)
 end
 
 vim.keymap.set("n", "<Leader>xf", smart_format, { desc = "Smart formatter." })
@@ -305,6 +361,22 @@ require("lazy").setup({
       lazy = false,
       config = function()
         vim.o.showmode = false -- Redundant.
+
+        local function update_colors()
+          local scheme = vim.o.background == "light" and "one" or "default"
+          vim.g.lightline = vim.tbl_extend("force", vim.g.lightline or {}, { colorscheme = scheme })
+          -- Palettes are cached by Vimscript autoload; reevaluate for the current background.
+          vim.cmd.runtime("autoload/lightline/colorscheme/" .. scheme .. ".vim")
+          vim.fn["lightline#init"]()
+          vim.fn["lightline#colorscheme"]()
+          vim.fn["lightline#update"]()
+        end
+
+        vim.api.nvim_create_autocmd("ColorScheme", {
+          group = vim.api.nvim_create_augroup("UserLightline", { clear = true }),
+          callback = update_colors,
+        })
+        update_colors()
       end,
     },
 
@@ -388,8 +460,12 @@ require("lazy").setup({
             map("n", "<Leader>gS", gitsigns.stage_buffer)
             map("n", "<Leader>gr", gitsigns.reset_hunk)
             map("n", "<Leader>gR", gitsigns.reset_buffer)
-            map("n", "<Leader>gN", gitsigns.prev_hunk)
-            map("n", "<Leader>gn", gitsigns.next_hunk)
+            map("n", "<Leader>gN", function()
+              gitsigns.nav_hunk("prev")
+            end)
+            map("n", "<Leader>gn", function()
+              gitsigns.nav_hunk("next")
+            end)
             map("n", "<Leader>gC", function()
               gitsigns.setqflist("all")
             end)
@@ -773,6 +849,7 @@ require("lazy").setup({
         -- Do not use virtual text to highlight the end of a block.
         vim.g.matchup_treesitter_disable_virtual_text = true
         vim.api.nvim_create_autocmd("FileType", {
+          group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
           callback = function(ev)
             -- Disable slow treesitter highlight for large files.
             local stats = vim.uv.fs_stat(vim.api.nvim_buf_get_name(ev.buf))
@@ -889,8 +966,8 @@ require("lazy").setup({
           -- "ty",
           "yamlls",
         },
-        -- Automatically call `vim.lsp.enable("...")` on the LSPs.
-        -- See the LSP section for configuration.
+        -- Enable all Mason-installed servers, not only `ensure_installed`.
+        -- Keep this enabled: there are no separate `vim.lsp.enable()` calls.
         automatic_enable = true,
       },
       dependencies = {
@@ -899,8 +976,7 @@ require("lazy").setup({
       },
     },
 
-    -- Still needed for LSP linkage wizardry. LSPs don't work without
-    -- as of Neovim 0.11.1.
+    -- Supplies the server configurations used by Mason's automatic activation.
     { "neovim/nvim-lspconfig", event = "BufReadPre" },
 
     -- Auto-completion, inlay hints and method signatures.
@@ -958,7 +1034,7 @@ require("lazy").setup({
           -- For Dbee, see https://github.com/MattiasMTS/cmp-dbee/issues/29
           per_filetype = {
             -- Dbee
-            sql = { "dbee", "buffer" }, -- Add any other source to include here
+            sql = { "dbee", inherit_defaults = true },
           },
           providers = {
             dbee = { name = "cmp-dbee", module = "blink.compat.source" },
@@ -1095,10 +1171,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.buf.format({ async = true })
     end, opts)
 
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-    -- Inlay type and parameter hints.
-    vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf }) -- Disabled by default, they're noisy.
+    -- Inlay hints default to off; preserve the user's choice across client attachments.
     vim.keymap.set("n", "<Leader>h", function()
       local filter = { bufnr = ev.buf }
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)

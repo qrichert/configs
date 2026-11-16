@@ -4,6 +4,7 @@ let mapleader="\<Space>"
 let maplocalleader="\\"
 
 syntax on                   " Turn on syntax highlighting.
+filetype plugin indent on   " Load filetype plugins before our FileType defaults.
 
 set mouse=a                 " Enable mouse usage (all modes).
 set clipboard^=unnamedplus  " Share system clipboard.
@@ -26,8 +27,11 @@ set undofile                " Persist undo history across sessions (`~/.local/st
 set shortmess+=A            " Don't warn when an existing swap file is found.
 
 " Remove trailing whitespace and multiple newlines.
-autocmd BufWritePre * :%s/\s\+$//e
-autocmd BufWritePre * %s/\n\+\%$//e
+augroup UserWhitespace
+  autocmd!
+  autocmd BufWritePre * :%s/\s\+$//e
+  autocmd BufWritePre * %s/\n\+\%$//e
+augroup END
 
 set incsearch               " Show matches while typing.
 set ignorecase              " Make search case insensitive.
@@ -41,29 +45,49 @@ set colorcolumn=73,81       " Show ruler at columns.
 set smartindent             " Do smart autoindenting when starting a new line.
 set tabstop=4               " Use 4 spaces per tab.
 set expandtab               " Convert tabs to spaces.
-set shiftwidth=4            " Shift (`<<`, `>>`, `=`) by 4 spaces (breaks `.editorconfig` support).
+set shiftwidth=4            " Shift (`<<`, `>>`, `=`) by 4 spaces by default.
 set softtabstop=-1          " Pressing `<Tab>` matches indentation width (`shiftwidth`).
 
-autocmd FileType json setlocal colorcolumn=81
-autocmd FileType markdown,text setlocal textwidth=72 colorcolumn=73 nosmartindent
-autocmd FileType python setlocal colorcolumn=73,89
-autocmd FileType rust setlocal colorcolumn=73,101
-autocmd FileType vim setlocal colorcolumn=73
+augroup UserFileTypes
+  autocmd!
+  autocmd FileType json setlocal colorcolumn=81
+  autocmd FileType markdown,text setlocal textwidth=72 colorcolumn=73 nosmartindent
+  autocmd FileType python setlocal colorcolumn=73,89
+  autocmd FileType rust setlocal colorcolumn=73,101
+  autocmd FileType vim setlocal colorcolumn=73
 
-" For some reason, `BufEnter` is the only event that works (without reload).
-autocmd BufEnter *.html,*.css setlocal tabstop=2 shiftwidth=2
-autocmd BufEnter *.js,*.jsx,*.ts,*.tsx setlocal tabstop=2 shiftwidth=2
-autocmd BufEnter *.json setlocal tabstop=2 shiftwidth=2
-autocmd BufEnter *.lua setlocal tabstop=2 shiftwidth=2
-autocmd BufEnter *.md setlocal tabstop=2 shiftwidth=2
-autocmd BufEnter *.yaml,*.yml setlocal tabstop=2 shiftwidth=2
+  " Apply defaults once per filetype, before EditorConfig overrides them.
+  autocmd FileType html,css,javascript,javascriptreact,typescript,typescriptreact,json,lua,markdown,yaml call s:TwoSpaceIndent()
+augroup END
+
+function! s:TwoSpaceIndent() abort
+  setlocal tabstop=2 shiftwidth=2 softtabstop=-1
+  let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+        \ . ' | setlocal tabstop< shiftwidth< softtabstop<'
+endfunction
 
 " Leader mappings.
 nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>w <Cmd>w<CR>
-nnoremap <Leader>q <Cmd>bp<Bar>sp<Bar>bn<Bar>bd<CR>
+nnoremap <Leader>q <Cmd>call <SID>CloseBuffer()<CR>
 nnoremap <Leader>Q <Cmd>%bd!<Bar>e#<Bar>bd#<CR>
 nnoremap <Leader>B <Cmd>windo set scrollbind! cursorbind!<CR>
+
+function! s:CloseBuffer() abort
+  if &modified
+    echohl ErrorMsg
+    echomsg 'Buffer has unsaved changes; save it before closing.'
+    echohl None
+    return
+  endif
+
+  let l:buffer = bufnr('%')
+  bprevious
+  if bufnr('%') == l:buffer
+    enew
+  endif
+  execute 'bdelete ' . l:buffer
+endfunction
 
 " Quickfix mappings.
 nnoremap <C-j> <Cmd>cnext<CR>
@@ -74,7 +98,10 @@ nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 
 " Open netrw unless a plugin has already mapped `-`.
-autocmd VimEnter * if exists(':Explore') && empty(maparg('-', 'n')) | nnoremap - <Cmd>Explore<CR>| endif
+augroup UserNetrw
+  autocmd!
+  autocmd VimEnter * if exists(':Explore') && empty(maparg('-', 'n')) | nnoremap - <Cmd>Explore<CR>| endif
+augroup END
 
 " Force the use of `hjkl`.
 noremap <Left> <Nop>
