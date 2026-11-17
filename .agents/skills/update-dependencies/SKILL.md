@@ -1,6 +1,6 @@
 ---
 name: update-dependencies
-description: Upgrade all dependencies in a project to the latest available versions, including major releases, across Bun, uv, and Cargo; update manifests and lockfiles and validate the result. Use for full project dependency refreshes, not a request to add or update one named package.
+description: Upgrade project dependencies and coordinated runtime pins across Bun, uv, Cargo, CI, and containers; update manifests and lockfiles and validate with the pinned runtimes. Use for full project dependency refreshes, not a request to add or update one named package.
 ---
 
 # Update dependencies
@@ -19,12 +19,18 @@ and test wrappers. A user-requested narrower scope takes precedence.
    `packageManager` fields, and tool version files. Search for every current
    version before editing, then update the coordinated pin set together or
    explicitly report why a reference is outside scope.
-3. Aim for the latest available direct and transitive versions, including
-   breaking major releases. Audit pins, upper bounds, overrides, and
-   patched packages for staleness; do not preserve them merely because
-   they were previously necessary. Verify whether upstream absorbed a
-   patch before removing it.
-4. If current releases conflict, establish the project's dependency
+3. Check current runtime releases and compatibility with proposed
+   dependency upgrades using upstream release notes and supported
+   version ranges. Look for a supported runtime fix before downgrading
+   a dependency or adding a test-environment workaround. Keep
+   development, test, CI, and production declarations aligned, or
+   explain intentional differences.
+4. Aim for the latest available direct and transitive versions,
+   including breaking major releases. Audit pins, upper bounds,
+   overrides, and patched packages for staleness. Do not preserve them
+   merely because they were previously necessary. Verify whether
+   upstream absorbed a patch before removing it.
+5. If current releases conflict, establish the project's dependency
    priority and test the conflict. Prefer its primary product dependency
    over adapters, and adapters over their transitive libraries (for
    example, Django over Django Ninja over Pydantic). Keep an older
@@ -37,8 +43,13 @@ and test wrappers. A user-requested narrower scope takes precedence.
 - **Bun:** In each Bun project, run `just update-aggressive` when that
   recipe exists; otherwise run `bun update --latest --force`. Review
   changes to `package.json` and `bun.lock`, especially `overrides` and
-  `patchedDependencies`. Update or remove those through the package
-  manager's supported workflow when evidence shows they are stale.
+  `patchedDependencies`. Inspect each patch file against the upgraded
+  package to decide whether its fix is still needed and whether the
+  patch still applies. Remove obsolete patches; revise and re-create
+  patches that need updating with `bun patch`. Verify that a frozen
+  install applies every retained patch and run targeted tests for its
+  intended behavior. Keep the manifest, lockfile, and patch files
+  aligned through Bun's workflow.
 - **uv projects:** Check the current status and supported uv commands
   for [#1419](https://github.com/astral-sh/uv/issues/1419) and
   [#6794](https://github.com/astral-sh/uv/issues/6794) before choosing
@@ -65,16 +76,22 @@ full-latest workflow with the same manifest and lockfile checks.
 
 ## Validate and report
 
-Run targeted tests for incompatibilities and fixes first. Then build and
-test every affected project with its repository wrappers. Run relevant
-lint, type, schema, and lock-consistency checks. For browser suites,
-run selected E2E cases rather than the full suite unless the user asks
-for it. Fix only regressions caused by the upgrade and rerun affected
-checks. Do not treat a passing build as a substitute for tests.
+Run targeted tests for incompatibilities and fixes first, then the
+affected unit and integration suites. Verify the installed runtime
+version and run these checks with the version CI actually installs,
+rather than assuming the local version matches. Build every affected
+project with its repository wrappers, including production builds. When
+runtime changes affect a container image, build and smoke-test that
+image if the environment supports it. Run relevant lint, type, schema,
+and lock-consistency checks. For browser suites, run selected E2E cases
+rather than the full suite unless the user asks for it. Fix only
+regressions caused by the upgrade and rerun affected checks. Neither
+passing lints nor a passing build substitutes for tests.
 
 Review the final diff for unrelated edits and unresolved constraints.
 Search the whole repository for superseded runtime and package-manager
 versions, and verify that CI setup, manifests, version files, and container
 images agree on the intended versions.
-Report exact files changed, builds and tests run, any packages left
-below latest with evidence, and validation that could not run.
+Report exact files and versions changed, builds and tests run, any
+packages left below latest with evidence, and validation that could not
+run.
