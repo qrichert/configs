@@ -1,7 +1,9 @@
 # Use `cmd/ctrl+shift+,` to reload the configuration.
 
-background = #060607
-background-opacity = 0.9
+# We can't change `background` based on light/dark mode, that's why
+# we keep a customization of the default dark theme (only use case).
+# background = #060607
+background-opacity = 0.97
 background-blur = 7
 
 font-size = 16
@@ -9,7 +11,7 @@ font-feature = -calt
 window-width = 80
 window-height = 24
 
-theme = light:Builtin Light,dark:Default Dark
+theme = light:Builtin Tango Light,dark:Ghostty Default Style Dark Custom
 window-theme = system
 macos-titlebar-style = tabs
 
