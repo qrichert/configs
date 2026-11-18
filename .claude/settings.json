@@ -47,6 +47,8 @@
       "effortLevel": "xhigh"
     }
   },
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
   "theme": "auto",
