@@ -49,6 +49,7 @@
   },
   "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
   "editorMode": "vim",
   "autoContinueAtUsageLimit": true,
   "inputNeededNotifEnabled": true,
