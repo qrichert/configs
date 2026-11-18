@@ -9,7 +9,8 @@ font-feature = -calt
 window-width = 80
 window-height = 24
 
-window-theme = dark
+theme = light:Builtin Light,dark:Default Dark
+window-theme = system
 macos-titlebar-style = tabs
 
 keybind = global:cmd+m=toggle_quick_terminal
