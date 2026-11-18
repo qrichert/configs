@@ -7,6 +7,9 @@
   - Staging is the user's review mechanism: staged = reviewed. Never
     touch it, and don't report on or worry about staging state (`MM`,
     index vs working drift, etc.).
+  - Never pile several commits into the working tree. On a multi-commit
+    plan, make one commit's changes, hand them off with a commit message,
+    and wait for me to commit before starting the next.
 - Never start the Docker daemon; only use it if already running.
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
