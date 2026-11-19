@@ -274,19 +274,6 @@ require("lazy").setup({
       end,
     },
 
-    -- Quick navigation.
-    {
-      url = "https://codeberg.org/andyg/leap.nvim",
-      event = "VeryLazy",
-      config = function()
-        vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
-        vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
-        -- Bidirectional `s`.
-        -- vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap-forward)")
-        -- vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
-      end,
-    },
-
     -- `fzf` integration (`:FzfLua`).
     --
     -- Dependencies:
