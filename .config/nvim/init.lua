@@ -289,6 +289,7 @@ require("lazy").setup({
         -- Keep the `fzf` process running in the background allowing
         -- `:FzfLua resume` to restore the picker state entirely.
         "hide",
+        fzf_colors = true,
         keymap = {
           -- Targets `fzf-lua`'s UI (preview windows, etc.).
           builtin = {
