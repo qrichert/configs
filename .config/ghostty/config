@@ -14,6 +14,7 @@ window-height = 24
 theme = light:Builtin Tango Light,dark:Ghostty Default Style Dark Custom
 window-theme = system
 macos-titlebar-style = tabs
+drag-handle = never
 
 keybind = global:cmd+m=toggle_quick_terminal
 keybind = global:ctrl+m=toggle_quick_terminal
