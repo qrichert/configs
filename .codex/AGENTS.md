@@ -16,6 +16,10 @@ reasoning, no side quests.
   before adopting it.
 - Prefer surgical diffs over proactive refactors, cleanup, or stylistic
   rewrites.
+- When a proposed test requires changing a production interface or
+  moving a responsibility, reconsider the test approach first. If the
+  responsibility already belongs where it is, keep it there and change
+  how the behavior is tested.
 - If inconsistent internal APIs force a workaround, stop and propose the
   smallest normalizing refactor first.
 - Do not expand scope unless you first explain why it is necessary.
