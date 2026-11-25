@@ -1,6 +1,6 @@
 ---
 name: update-dependencies
-description: Upgrade project dependencies and coordinated runtime pins across Bun, uv, Cargo, CI, and containers; update manifests and lockfiles and validate with the pinned runtimes. Use for full project dependency refreshes, not a request to add or update one named package.
+description: Upgrade project dependencies and coordinated version pins across package managers, CI workflows, container images, and deployment tooling. Update manifests and lockfiles and validate with the pinned runtimes. Use for full project dependency refreshes, not a request to add or update one named package.
 ---
 
 # Update dependencies
@@ -14,11 +14,13 @@ and test wrappers. A user-requested narrower scope takes precedence.
 1. Inventory manifests, lockfiles, workspaces, update recipes, version
    constraints, overrides, patches, and existing work. Determine which
    packages and projects the request covers before changing them.
-2. Inventory runtime and package-manager pins across the whole repository,
-   including CI workflows, container base images, manifest
-   `packageManager` fields, and tool version files. Search for every current
-   version before editing, then update the coordinated pin set together or
-   explicitly report why a reference is outside scope.
+2. Inventory version pins beyond application dependency lists. Check
+   runtime and package-manager pins in CI, container builds, manifest
+   `packageManager` fields, and tool version files. Include hidden
+   configuration directories, task recipes, and bootstrap and deployment
+   scripts. Follow version variables to their declarations. Search for
+   each version being upgraded and update related references together or
+   report why a reference is outside scope.
 3. Check current runtime releases and compatibility with proposed
    dependency upgrades using upstream release notes and supported
    version ranges. Look for a supported runtime fix before downgrading
@@ -37,6 +39,25 @@ and test wrappers. A user-requested narrower scope takes precedence.
    version only for a demonstrated incompatibility, and report the
    evidence and affected functionality. Ask when that priority is
    genuinely ambiguous or the required fix exceeds the approved scope.
+
+- **CI.** Check external actions and reusable workflows referenced by
+  `uses:`, including tags and commit pins. Inspect local workflows and
+  composite actions for their own dependencies. Check runner versions,
+  job and service images, and standalone tools installed by workflows.
+- **Containers.** Check every Dockerfile stage and the service images in
+  Compose files, including overrides and optional profiles. Include CI
+  job and service images when coordinating versions across environments.
+  Identify images built and published by the project so their tags
+  follow its release workflow.
+- **Provisioning.** Check role, collection, and plugin requirements,
+  including Git refs. For Ansible, inspect Galaxy requirements files and
+  the way `ansible-core`, lint tools, and controller-side Python
+  dependencies are installed. Check compatibility between them.
+- **Install commands.** Look for OS packages and native libraries,
+  standalone CLIs, downloaded artifacts, and browser binaries installed
+  by CI, container builds, task recipes, and provisioning. Review
+  pinned versions and check that unpinned dependencies remain available
+  and compatible in the environments that install them.
 
 ## Upgrade with the package manager
 
@@ -74,24 +95,57 @@ and test wrappers. A user-requested narrower scope takes precedence.
 If the repository supports another package manager, use its supported
 full-latest workflow with the same manifest and lockfile checks.
 
+## Upgrade CI, container, and provisioning dependencies
+
+- Update action and reusable workflow refs after checking release notes
+  for changes to inputs, outputs, runner requirements, and permissions.
+  Preserve the project's pinning policy, including commit pins where used.
+- Check third-party images against upstream registry tags and release
+  notes, including images already using floating tags. Update compatible
+  tags and any pinned digests together. Preserve the intended image
+  variant and pinning policy. Check whether a floating tag can move to
+  a newer release series and report when it already tracks the intended
+  release. Before a stateful service crosses a major version, check
+  compatibility with existing data and report required migration steps.
+- Use repository wrappers to update provisioning dependencies. Install
+  the selected role, collection, and plugin versions and verify what the
+  tooling resolves. Refresh an existing install if it can mask a changed
+  version or Git ref. Use local lint and syntax checks plus any approved
+  disposable-environment tests.
+
 ## Validate and report
 
-Run targeted tests for incompatibilities and fixes first, then the
-affected unit and integration suites. Verify the installed runtime
-version and run these checks with the version CI actually installs,
+Refresh browser binaries through the test framework's installer when
+its upgrade changes their revisions. Run targeted tests for compatibility
+and fixes, then the affected unit and integration suites. Verify the
+installed runtime version and run checks with the version CI installs,
 rather than assuming the local version matches. Build every affected
 project with its repository wrappers, including production builds. When
 runtime changes affect a container image, build and smoke-test that
 image if the environment supports it. Run relevant lint, type, schema,
 and lock-consistency checks. For browser suites, run selected E2E cases
 rather than the full suite unless the user asks for it. Fix only
-regressions caused by the upgrade and rerun affected checks. Neither
-passing lints nor a passing build substitutes for tests.
+regressions caused by the upgrade and address check gaps as described
+below. Rerun affected checks. Neither passing lints nor a passing build
+substitutes for tests.
 
 Review the final diff for unrelated edits and unresolved constraints.
-Search the whole repository for superseded runtime and package-manager
-versions, and verify that CI setup, manifests, version files, and container
-images agree on the intended versions.
+Search the whole repository for superseded versions. Verify that pins
+with a shared compatibility requirement agree across manifests, version
+files, workflows, container configurations, and provisioning. Validate
+changed workflows and Compose configurations with repository checks.
+Verify that changed image references resolve and smoke-test the affected
+services when the environment supports it.
+
+If a required dependency invariant lacks a check and drift can escape
+existing validation, fix the check in the repository that owns the
+declarations. Prefer extending an existing test or lint gate. Check the
+relationship the project relies on, such as alignment between CI and
+deployment pins that are intended to match. For mirrored files, make the
+fix in the upstream source repository and follow the normal sync
+workflow when authorized. If the repository or check change is outside
+the approved scope, report the gap and ask before editing it.
+
 Report exact files and versions changed, builds and tests run, any
-packages left below latest with evidence, and validation that could not
-run.
+dependencies left below latest with evidence, and validation that could
+not run.
