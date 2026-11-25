@@ -173,6 +173,10 @@ must challenge the requested necessity and UX cost of behavior even when the
 implementation matches the plan. Apply finding triage before adding more
 mechanisms or tests in response to a review.
 
+When a test expects a change to established user-visible behavior, trace
+that expectation to the user's request or a confirmed decision. Check
+where else the changed value is used and flag any unrequested effects.
+
 After fixing a finding, review that fix narrowly and rerun relevant
 validation. Repeat this focused loop for any new findings.
 Then review the complete final changeset against its base, including all earlier
