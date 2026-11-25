@@ -66,6 +66,10 @@ reasoning, no side quests.
   tasks to lower powered (although suitable) agents. For example,
   implementing a plan doesn't require as much capacity. Focus on where
   you shine: complex problems, delegate the rest.
+- Keep external reviewer sessions resumable by default. For Claude CLI
+  reviews, keep session persistence enabled, save the session ID and
+  working directory alongside the assessment, and resume that session
+  for follow-up questions. Use an ephemeral session only if I ask.
 
 ## Code
 

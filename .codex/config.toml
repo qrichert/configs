@@ -11,5 +11,8 @@ terminal_title = ["spinner", "project", "thread"]
 vim_mode_default = true
 auto_recap = false
 
+[features]
+memories = true
+
 [notice]
 hide_rate_limit_model_nudge = true
