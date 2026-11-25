@@ -62,6 +62,10 @@ reasoning, no side quests.
   change dependencies manually.
 - Create and install user skills in `~/.agents/skills` unless I
   explicitly request another location.
+- If you are a more capable model, delegate easy and straightforward
+  tasks to lower powered (although suitable) agents. For example,
+  implementing a plan doesn't require as much capacity. Focus on where
+  you shine: complex problems, delegate the rest.
 
 ## Code
 
