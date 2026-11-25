@@ -23,6 +23,9 @@ correctness alone does not establish that the writing belongs there.
 
 ## Draft to fit
 
+- Don't put edge cases into titles, introductions or overviews. Use
+  titles, headings, and one-line API summaries to describe the common
+  case. Explain the exception in the body if readers need it.
 - Before setup instructions, explain the problem the feature solves,
   who benefits, and when to use it. Describe the practical outcome for
   the reader; naming a setting or explaining its mechanics is not
