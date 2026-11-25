@@ -11,6 +11,15 @@
     plan, make one commit's changes, hand them off with a commit message,
     and wait for me to commit before starting the next.
 - Never start the Docker daemon; only use it if already running.
+- Keep the machine usable while you work: I use it at the same time,
+  and unbounded test suites, builds and browsers fill RAM and swap and
+  max the CPU. Before heavy jobs (test suites, builds, Playwright,
+  browsers, databases), check the machine's cores, RAM and current
+  load, then run them under `nice -n 15`, one at a time, with workers
+  sized to leave room (never all cores), and never several production
+  builds side by side. Stop the servers and browsers you start when
+  done. Any agent you drive (e.g. Codex) gets the same rules in its
+  prompt.
 - Use the project's package manager to manipulate dependencies. NEVER
   change dependencies manually.
 - A question gets an answer, not an edit. When I ask a question,
