@@ -27,6 +27,10 @@
   justify it with evidence or admit the mistake. NEVER edit, revert, or
   "fix" files in response to a question. Only change files on an
   explicit instruction; if my reply is ambiguous, ask what I mean.
+- If you are a more capable model, delegate easy and straightforward
+  tasks to lower powered (although suitable) agents. For example,
+  implementing a plan doesn't require as much capacity. Focus on where
+  you shine: complex problems, delegate the rest.
 
 ## Planning
 
